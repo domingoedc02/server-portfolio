@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -55,9 +57,6 @@ public class Users implements UserDetails {
 
     @Column(nullable = false)
     private Timestamp update_date;
-
-    // @Enumerated(EnumType.STRING)
-    // private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
