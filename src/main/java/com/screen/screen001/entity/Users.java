@@ -27,7 +27,7 @@ public class Users implements UserDetails {
 
     @Id
     @Column(nullable = false, columnDefinition = "char(5)", length = 5)
-    private String user_id;
+    private String member_id;
 
     @Column(nullable = false, columnDefinition = "varchar(120)", length = 120)
     private String password;
@@ -35,32 +35,23 @@ public class Users implements UserDetails {
     @Column(nullable = false, columnDefinition = "varchar(200)", length = 200)
     private String email;
 
+    @Column(nullable = false, columnDefinition = "varchar(40)", length = 40)
+    private String member_name;
+
     @Column(nullable = false, columnDefinition = "char(1)", length = 1)
-    private String working_status;
-
-    @Column(nullable = false, columnDefinition = "varchar(40)", length = 40)
-    private String last_name;
-
-    @Column(nullable = false, columnDefinition = "varchar(40)", length = 40)
-    private String first_name;
-
-    @Column(nullable = true, length = 40, columnDefinition = "varchar(40)")
-    private String last_name_kana;
-
-    @Column(nullable = true, length = 40, columnDefinition = "varchar(40)")
-    private String first_name_kana;
+    private String admin_flag;
 
     @Column(nullable = false, columnDefinition = "char(1)", length = 1)
     private String delete_flag;
 
     @Column(nullable = false, columnDefinition = "char(5)", length = 5)
-    private String insert_user;
+    private String insert_member;
 
     @Column(nullable = false)
     private Timestamp insert_date;
 
     @Column(nullable = false, columnDefinition = "char(5)", length = 5)
-    private String update_user;
+    private String update_member;
 
     @Column(nullable = false)
     private Timestamp update_date;
@@ -71,12 +62,12 @@ public class Users implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // return List.of(new SimpleGrantedAuthority(role.name()));
-        return List.of(new SimpleGrantedAuthority(working_status));
+        return List.of(new SimpleGrantedAuthority(admin_flag));
     }
 
     @Override
     public String getUsername() {
-        return user_id;
+        return member_id;
     }
 
     @Override
