@@ -1,13 +1,12 @@
-// package com.screen.screen001.repository;
+package com.screen.screen001.repository;
 
-// import java.util.Optional;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-// import org.springframework.data.jpa.repository.JpaRepository;
+import com.screen.screen001.entity.User;
 
-// import com.screen.screen001.entity.Users;
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-// public interface UserRepository extends JpaRepository<Users, Integer> {
+  Optional<User> findByMemberId(String memberId);
 
-// Optional<Users> findByUsername(String username);
-
-// }
+}
