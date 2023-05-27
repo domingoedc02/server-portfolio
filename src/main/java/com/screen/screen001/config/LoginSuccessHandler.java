@@ -30,22 +30,16 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws ServletException, IOException {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        // System.out.println("Username: "+userDetails.getUsername());
-
         
         String role = String.valueOf(userDetails.getAuthorities().toArray()[0]);
         String redirectURL = request.getContextPath();
         if(role.equals("ROLE_ADMIN")){
-            response.sendRedirect(redirectURL+"/screen001/adminmenu");
+            redirectURL += "/screen001/adminmenu";
         } else if(role.equals("ROLE_USER")){
-            response.setHeader("Authorization", "Bearer something");
-            System.out.println(request.getHeader("Authorization"));
-            // response.sendRedirect(redirectURL+"/screen001/menu");
-            response.addHeader("Authorization", "Bearer token");
+            redirectURL += "/screen001/menu";
         }
 
-
-        super.onAuthenticationSuccess(request, response, authentication);
+        response.sendRedirect(redirectURL);
     }
     
 }

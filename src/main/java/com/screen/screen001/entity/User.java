@@ -25,7 +25,7 @@ import com.screen.screen001.token.Token;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(name = "tbl_members")
 public class User implements UserDetails {
   
   @Id

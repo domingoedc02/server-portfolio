@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.screen.screen001.entity.Permission.ADMIN_CREATE;
-import static com.screen.screen001.entity.Permission.ADMIN_DELETE;
-import static com.screen.screen001.entity.Permission.ADMIN_READ;
-import static com.screen.screen001.entity.Permission.ADMIN_UPDATE;
+// import static com.screen.screen001.entity.Permission.ADMIN_CREATE;
+// import static com.screen.screen001.entity.Permission.ADMIN_DELETE;
+// import static com.screen.screen001.entity.Permission.ADMIN_READ;
+// import static com.screen.screen001.entity.Permission.ADMIN_UPDATE;
 
 
 @RequiredArgsConstructor

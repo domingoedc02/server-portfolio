@@ -6,15 +6,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -30,34 +35,39 @@ public class SecurityConfiguration {
   @Autowired
   private LoginSuccessHandler successHandler;
 
+  // @Bean
+  // public UserDetailsService userDetailsService() {
+  //   UserDetails user = User
+  // }
+
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf()
         .disable()
-        .authorizeHttpRequests()
-        .requestMatchers(
-                "/api/v1/auth/**",
-                "/screen001/**"
-        )
-        .permitAll()
-        .anyRequest()
-          .authenticated()
-        .and()
-          .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .formLogin()
-        .loginPage("/screen001/login")
-        .loginProcessingUrl("/api/v1/auth/authenticate")
-        .successHandler(successHandler)
-        .failureUrl("/screen001/login?error=true")
-        .usernameParameter("memberId")
-        .passwordParameter("password")
-        // .defaultSuccessUrl("/screen001/menu", true)
         
-        .and()
+        .authorizeHttpRequests( (request) -> request
+          .requestMatchers(
+                "/api/v1/auth/**"
+          ).permitAll()
+          .requestMatchers("/screen001/menu").hasAuthority("ROLE_USER")
+          .anyRequest().authenticated()
+        )
+        // .and()
+        //   .sessionManagement()
+        //   .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        // .and()
+        .formLogin((form) -> form
+            .loginPage("/screen001/login")
+            .loginProcessingUrl("/api/v1/auth/authenticate")
+            .successHandler(successHandler)
+            // .defaultSuccessUrl("/screen001/menu", true)
+            .failureUrl("/screen001/login?error=true")
+            .usernameParameter("memberId")
+            .passwordParameter("password")
+            .permitAll()
+        )
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
         .logout()
@@ -71,4 +81,16 @@ public class SecurityConfiguration {
 
     return http.build();
   }
+
+  // @Bean
+	// public UserDetailsService userDetailsService() {
+	// 	UserDetails user =
+	// 		 User.withDefaultPasswordEncoder()
+	// 			.username("user")
+	// 			.password("password")
+  //       .role("")
+	// 			.build();
+
+	// 	return new InMemoryUserDetailsManager(user);
+	// }
 }
