@@ -1,14 +1,14 @@
-package com.screen.screen001.auth;
+package com.screen.screen001.services;
 
-import com.screen.screen001.config.JwtService;
 import com.screen.screen001.token.Token;
 import com.screen.screen001.token.TokenRepository;
 import com.screen.screen001.token.TokenType;
+import com.screen.screen001.auth.AuthenticationRequest;
+import com.screen.screen001.auth.AuthenticationResponse;
+import com.screen.screen001.auth.RegisterRequest;
 import com.screen.screen001.entity.Role;
 import com.screen.screen001.entity.User;
 import com.screen.screen001.repository.UserRepository;
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +34,9 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  
+
+
 
   public AuthenticationResponse register(RegisterRequest request) {
     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -41,7 +45,7 @@ public class AuthenticationService {
     .memberId(request.getMemberId())
     .email(request.getEmail())
     .password(passwordEncoder.encode(request.getPassword()))
-    .adminFlag(request.getAdminFlag())
+    .adminFlag(Role.USER)
     .deleteFlag("0")
     .insertMember(request.getInsertMember())
     .insertDate(timestamp)
@@ -55,9 +59,10 @@ public class AuthenticationService {
     saveUserToken(savedUser, jwtToken);
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
-            .refreshToken(refreshToken)
+        .refreshToken(refreshToken)
         .build();
   }
+
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
@@ -68,6 +73,7 @@ public class AuthenticationService {
     );
     var user = repository.findByMemberId(request.getMemberId())
         .orElseThrow();
+    System.out.println("Logged in with delete flag ------- "+user.getDeleteFlag());
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);

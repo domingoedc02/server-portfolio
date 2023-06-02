@@ -51,7 +51,7 @@ public class SecurityConfiguration {
           .requestMatchers(
                 "/api/v1/auth/**"
           ).permitAll()
-          .requestMatchers("/screen001/menu").hasAuthority("ROLE_USER")
+          // .requestMatchers("/screen001/menu").hasAuthority("ROLE_USER")
           .anyRequest().authenticated()
         )
         // .and()
@@ -81,16 +81,4 @@ public class SecurityConfiguration {
 
     return http.build();
   }
-
-  // @Bean
-	// public UserDetailsService userDetailsService() {
-	// 	UserDetails user =
-	// 		 User.withDefaultPasswordEncoder()
-	// 			.username("user")
-	// 			.password("password")
-  //       .role("")
-	// 			.build();
-
-	// 	return new InMemoryUserDetailsManager(user);
-	// }
 }

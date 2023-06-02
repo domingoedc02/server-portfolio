@@ -17,28 +17,6 @@ public class Screen001Application {
 		SpringApplication.run(Screen001Application.class, args);
 	}
 
-	@Autowired
-	private TrainingTopicsRepository repository;
-
-	public void run(String... args) throws Exception{
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Time time = new Time(System.currentTimeMillis());
-        TrainingTopics trainingTopics = new TrainingTopics();
-        
-
-        trainingTopics.setTrainingId("SR001");
-        trainingTopics.setTrainingName("Test");
-        trainingTopics.setTrainingDate(timestamp);
-        trainingTopics.setTrainingStartTime(time);
-        trainingTopics.setTrainingEndTime(time);
-        trainingTopics.setTrainingDetails("test training details");
-        trainingTopics.setInsertMember("SR001");
-        trainingTopics.setInsertDate(timestamp);
-        trainingTopics.setUpdateMember("SR001");
-        trainingTopics.setUpdateDate(timestamp);
-        repository.save(trainingTopics);
-		System.out.println(trainingTopics);
-		
-	}
+	
 
 }

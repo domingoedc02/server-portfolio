@@ -45,11 +45,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>SR0001</td>
-                                <td>XXXX</td>
+                            <tr th:if="${users.empty}">
+                                <td>No data available</td>
                             </tr>
-                           <tr>
+                            <tr th:each="user : ${users}" >
+                                
+                                    <td th:text="${user.memberId}">SR0001</td>
+                                    <td><a th:href="@{'/screen001/memberlist/'+${user.memberId}}" th:text="${user.memberName}"></a></td>
+                                
+                                
+                            </tr>
+                           <!-- <tr>
                                 <td>SR0002</td>
                                 <td>XXXX</td>
                             </tr>
@@ -64,7 +70,7 @@
                             <tr>
                                 <td>SR0005</td>
                                 <td>XXXX</td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>

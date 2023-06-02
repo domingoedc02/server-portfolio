@@ -1,9 +1,10 @@
-package com.screen.screen001.auth;
+package com.screen.screen001.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.screen.screen001.auth.AuthenticationRequest;
+import com.screen.screen001.auth.AuthenticationResponse;
+import com.screen.screen001.auth.RegisterRequest;
+import com.screen.screen001.services.AuthenticationService;
 
 import java.io.IOException;
 

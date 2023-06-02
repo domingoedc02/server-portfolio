@@ -36,32 +36,28 @@
                     <h2 class="text-center mb-5">管理者メニュー</h2>
 
                     <h4 class="d-inline">研修一覧</h4>
-                    <a href="#" class="float-right">研修登録</a>
-                    <table class="table mb-5">
+                    <a th:href="@{/screen001/trainingadd}" class="float-right">研修登録</a>
+                    <table class="table mb-5" >
                         <tbody>
-                            <tr>
-                                <td scope="row">23/03/11 xxxxxx</td>
-                                <td class="w-25 "><button class="d-block mx-auto btn btn-primary">削除</button></td>
+                            <tr th:if="${listOfTopics.empty}">
+                                <td>No data available</td>
                             </tr>
-                            <tr>
-                                <td scope="row">23/02/11 xxxxxx</td>
+                            <tr th:each="topic : ${listOfTopics}">
+                                <td scope="row"><a th:href="@{'/screen001/trainingboard/' + ${topic.trainingId}}"><span th:text="${topic.trainingDate}"></span> <span th:text="${topic.trainingName}"></span></a></td>
                                 <td class="w-25 "><button class="d-block mx-auto btn btn-primary">削除</button></td>
                             </tr>
                         </tbody>
                     </table>
 
                     <h4 class="d-inline">メンバー一覧</h4>
-                    <a href="#" class="float-right">メンバー登録</a>
+                    <a th:href="@{/screen001/memberadd}" class="float-right">メンバー登録</a>
                     <table class="table">
                         <tbody>
-                            <tr>
-                                <td scope="row">SR0001</td>
-                                <td>XXXX</td>
-                                <td class="w-25 "><button class="d-block mx-auto btn btn-primary">削除</button></td>
-                            </tr>
-                            <tr>
-                                <td scope="row">SR0002</td>
-                                <td>XXXX</td>
+                            <tr th:each="user : ${userList}">
+                                <td scope="row" >
+                                    <span th:text="${user.memberId}"></span> &nbsp;&nbsp;&nbsp;&nbsp; <span th:text="${user.memberName}"></span>
+                                </span></td>
+                                
                                 <td class="w-25 "><button class="d-block mx-auto btn btn-primary">削除</button></td>
                             </tr>
                         </tbody>

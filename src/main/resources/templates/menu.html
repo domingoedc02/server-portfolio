@@ -42,58 +42,27 @@
                     
                     <h5 class="mt-5">研修一覧</h5>
                     <table class="table">
-                        <!-- <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                        </thead> -->
                         <tbody>
-                            <tr>
+                            <tr th:if="${listOfTopics.empty}">
+                                <th></th>
+                                <td>No available data</td>
+                            </tr>
+
+                            <tr th:each="topics : ${listOfTopics}">
                                 <th class="new-badge"><span class="badge badge-warning">NEW</span></th>
-                                <td scope="row"> 23/03/11 xxxxxx</td>
+                                <td scope="row"> <a th:href="@{'/screen001/trainingboard/' + ${topics.trainingId}}"><span th:text="${topics.trainingDate}"></span> <span th:text="${topics.trainingName}"></span></a></td>
                             </tr>
-                            <tr>
-                                <th class="new-badge"><span class="badge badge-warning">NEW</span></th>
-                                <td scope="row">23/03/11 xxxxxx</td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td scope="row">23/02/11 xxxxxx</td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td scope="row">23/01/11 xxxxxx</td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td scope="row">22/12/11 xxxxxx</td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                 
-                    <a class="d-block my-5" href="#">メンバー一覧</a>
-                    <a class="d-block my-5" href="#">管理者メニュー</a>
+                    <a class="d-block my-5" th:href="@{/screen001/memberlist}">メンバー一覧</a>
+                    <a class="d-block my-5" th:href="@{/screen001/adminmenu}">管理者メニュー</a>
 
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- <script src="./scripts/login.js"></script> -->
-    <script>
-        fetch("http://localhost:8081/screen001/menu", {
-            headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJTQzAwMSIsInJvbGUiOlt7ImF1dGhvcml0eSI6IlJPTEVfVVNFUiJ9XSwiaWF0IjoxNjg0ODQ0NTY0LCJleHAiOjE2ODQ5MzA5NjR9.Yz5ppMZL28kf86wFNVWMIAv5ZjdHjJuZGxxlG7EaXCI"
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-        })
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

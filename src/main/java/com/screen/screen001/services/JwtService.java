@@ -1,4 +1,4 @@
-package com.screen.screen001.config;
+package com.screen.screen001.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

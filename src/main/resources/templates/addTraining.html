@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="https://thymeleaf.org">
+<html lang="en" xmlns:th="https://thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous"> -->
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.css"
+    rel="stylesheet"
+    />
     <style>
         .logout {
             display: block;
@@ -33,21 +48,80 @@
                     <h2 class="text-center">研修登録</h2>
 
                     <div class="px-5">
-                        <form >
+                        <form role="form" method="post" th:action="@{/screen001/form/trainingadd}" th:object="${topics}">
+                            <div id="successAlert" class="alert alert-success alert-dismissible mt-5" style="display: none;">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong id="successTrainingName"></strong> 
+                                研修登録しました
+                            </div>
                             <div class="form-group mt-5">
                                 <label for="name">研修名</label>
-                                <input type="text" class="form-control" id="name" placeholder="XXXX">
+                                <input type="text" class="form-control" id="name" placeholder="XXXX" th:field="*{trainingName}">
                             </div>
-                            <div class="form-group">
-                                <label for="date">研修日</label>
-                                <input type="text" class="form-control" id="date" placeholder="XXXX">
+                            <div class="form-group mt-3">
+                                <label for="trainingDate">研修日</label>
+                                <input type="date" id="trainingDate" name="trainingDate">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3"> 
+                                <label for="trainingStartTime">開始時間</label>
+                                <input class="mx-3" type="time" id="trainingStartTime" name="trainingStartTime"
+                                    min="06:00" max="20:00">
+                                <label for="trainingEndTime" class="mx-3">終了時間</label>
+                                <input type="time" id="trainingEndTime" name="trainingEndTime"
+                                    min="06:00" max="20:00" >
+                            </div>
+                            
+                              
+                            <div class="form-group mt-3">
                                 <label for="details">掲示板</label>
-                                <textarea class="float-right" name="details" id="details" cols="35" rows="5"></textarea>
+                                <textarea class="float-right" name="details" id="details" cols="35" rows="5" th:field="*{trainingDetails}"></textarea>
                             </div>
 
-                            <button class="btn btn-primary w-100 my-5">登録</button>
+
+
+                            <button type="button" onclick="addTraining()" class="btn btn-primary w-100 my-5">登録</button>
+                            <script>
+                                // Data Picker Initialization
+                                
+                                function addTraining(){
+                                    let name = document.getElementById("name").value;
+                                    let date = document.getElementById("trainingDate").value;
+                                    let startTime = document.getElementById("trainingStartTime").value;
+                                    let endTime = document.getElementById("trainingEndTime").value;
+                                    let details = document.getElementById("details").value;
+
+                                    if(name !== "" && date !== ""){
+                                        let host = window.location.protocol +"//"+ window.location.host;
+                                        fetch(`${host}/screen001/form/trainingadd`, {
+                                            method: "post",
+                                            headers: {
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify({
+                                                trainingName: name,
+                                                trainingDate: date,
+                                                trainingStartTime: startTime+":00",
+                                                trainingEndTime: endTime+":00",
+                                                trainingDetails: details
+                                            })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if(data["trainingId"] !== null || data["trainingId"] !== ""){
+                                                document.getElementById("name").value = "";
+                                                document.getElementById("trainingDate").value = "";
+                                                document.getElementById("trainingStartTime").value = "";
+                                                document.getElementById("trainingEndTime").value = "";
+                                                document.getElementById("details").value = "";
+
+                                                document.getElementById("successAlert").style.display = "block"
+                                                document.getElementById("successTrainingName").textContent = name
+                                            }
+                                        })
+                                    }
+                                    
+                                }
+                            </script>
                         </form>
                     </div>
                 </div>
@@ -56,6 +130,10 @@
     </div>
 
     <!-- <script src="./scripts/login.js"></script> -->
+    <script
+        type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.js"
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

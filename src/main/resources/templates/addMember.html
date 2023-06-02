@@ -31,27 +31,81 @@
                 <div class="col column">
                     <a href="#" class="float-right">戻る</a>
                     <h2 class="text-center">メンバー登録</h2>
+                    
 
                     <div class="px-5">
-                        <form>
+                        <form th:action="@{/api/v1/auth/register}" method="post" th:object="${user}">
+                            <div id="successAlert" class="alert alert-success alert-dismissible mt-5" style="display: none;">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong id="successMemberId"></strong> 
+                                ユーザーが正常に追加されました。
+                            </div>
                             <div class="form-group mt-5">
                                 <label for="name">ID</label>
-                                <input type="text" class="form-control" id="name" placeholder="XXXX">
+                                <input type="text" class="form-control" id="id" placeholder="XXXX" th:field="*{memberId}">
                             </div>
                             <div class="form-group">
                                 <label for="date">氏名</label>
-                                <input type="text" class="form-control" id="date" placeholder="XXXX">
+                                <input type="text" class="form-control" id="name" placeholder="XXXX" th:field="*{memberName}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Mail</label>
-                                <input type="email" class="form-control" id="email" placeholder="XXXX@XXXX">
+                                <input type="email" class="form-control" id="email" placeholder="XXXX@XXXX" th:field="*{email}">
                             </div>
+
+                
+                            
 
                             <div>
-                                <h5 class="mt-5">初期PW：xxxxxxxx</h5>
+                                <span th:text="${adminId}" hidden id="adminId"></span>
+                                <h5 class="mt-5">初期PW： <span th:text="${temporaryPassword}" id="password" value="hrhrh"></span></h5>
                             </div>
 
-                            <button class="btn btn-primary w-100 my-3">登録</button>
+                            <button type="button" class="btn btn-primary w-100 my-3" onclick="addmember()">登録</button>
+                            <script>
+                                function addmember(){
+                                    let memberId = document.getElementById("id").value;
+                                    let memberName = document.getElementById("name").value;
+                                    let email = document.getElementById("email").value;
+                                    let password = document.getElementById("password").textContent
+                                    let insertId = document.getElementById("adminId").textContent
+
+                                    //url
+                                    let host = window.location.protocol +"//"+ window.location.host;
+                                    
+                                    if(memberId !== "" && memberName !== "" && email !== ""){
+                                        fetch(`${host}/api/v1/auth/register`, {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify({
+                                                memberId: memberId,
+                                                memberName: memberName,
+                                                email: email,
+                                                password: password,
+                                                insertMember: insertId,
+                                                updateMember: insertId
+                                            })
+                                        })
+                                        .then(response => response.json())
+                                        .then(result => {
+                                            
+                                            if(result['access_token'] !== null){
+                                                document.getElementById("successAlert").style.display = "block"
+                                                document.getElementById("successMemberId").textContent = memberId
+
+                                                memberId = document.getElementById("id").value = ""
+                                                memberName = document.getElementById("name").value = ""
+                                                email = document.getElementById("email").value = ""
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.log(error)
+                                        })
+                                    }
+                                }
+                            </script>
                         </form>
                     </div>
                 </div>

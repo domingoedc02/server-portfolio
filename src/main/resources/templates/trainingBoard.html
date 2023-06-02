@@ -28,21 +28,28 @@
     <div class="container">
         <div class="row">
             <div class="border">
-                <div class="col column">
+                
+                <div class="col column" >
                     <a href="#" class="logout">戻る</a>
                     <h2 class="text-center">研修掲示板</h2>
+                    <div th:if="${topic.empty}">
+                        <h2>No data available</h2>
+                    </div>
 
-                    <h4 class="mt-4">〇〇〇〇〇</h4>
-                    <h4 class="my-3">23/03/10　10:00-12:00</h4>
-                    <h4 class="my-3">23/03/11</h4>
-                    <h4 class="my-3">●●●●</h4>
-                    <p class="w-75 my-3">
-                        xxxxxxxxxxxxxxxxxxxxxxx
-                        xxxxxxxxxxxxxxxxxxxxxxx
-                        xxxxxxxxxxxxxxxxxxxxxxx
-                    </p>
-                    <div style="text-align: center;">
-                        <a href="#" class="my-3">ファイルxxx.zip</a>
+                    
+                    <div th:each="topic : ${topic}">
+                        <h4 class="mt-4" th:text="${topic.trainingName}">〇〇〇〇〇</h4>
+                        <h4 class="my-3"><span th:text="${topic.trainingDate}"></span>　<span th:text="${topic.trainingStartTime}"></span> - <span th:text="${topic.trainingEndTime}"></span></h4>
+                        <!-- <h4 class="my-3">23/03/11</h4> -->
+                        <h4 class="my-3">●●●●</h4>
+                        <p class="w-75 my-3" th:text="${topic.trainingDetails}">
+                            xxxxxxxxxxxxxxxxxxxxxxx
+                            xxxxxxxxxxxxxxxxxxxxxxx
+                            xxxxxxxxxxxxxxxxxxxxxxx
+                        </p>
+                        <div style="text-align: center;">
+                            <a href="#" class="my-3">ファイルxxx.zip</a>
+                        </div>
                     </div>
                 </div>
             </div>

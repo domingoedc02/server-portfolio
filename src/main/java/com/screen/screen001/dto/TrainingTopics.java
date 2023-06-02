@@ -1,5 +1,6 @@
 package com.screen.screen001.dto;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
@@ -28,7 +29,10 @@ public class TrainingTopics {
     private String trainingName;
 
     @Column(nullable = false)
-    private Timestamp trainingDate;
+    private Date trainingDate;
+
+    @Column(nullable = true, length = 1)
+    private String deleteFlag;
 
     @Column(nullable = true)
     private Time trainingStartTime;
@@ -59,6 +63,14 @@ public class TrainingTopics {
         this.trainingId = trainingId;
     }
 
+    public String getDeleteFlag(){
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(String deleteFlag){
+        this.deleteFlag = deleteFlag;
+    }
+
     public String getTrainingName(){
         return trainingName;
     }
@@ -67,11 +79,11 @@ public class TrainingTopics {
         this.trainingName = trainingName;
     }
 
-    public Timestamp getTrainingDate(){
+    public Date getTrainingDate(){
         return trainingDate;
     }
 
-    public void setTrainingDate(Timestamp trainingDate){
+    public void setTrainingDate(Date trainingDate){
         this.trainingDate = trainingDate;
     }
 
@@ -87,7 +99,7 @@ public class TrainingTopics {
         return trainingEndTime;
     }
 
-    public void setTrainingId(Time trainingEndTime){
+    public void setTrainingEndTime(Time trainingEndTime){
         this.trainingEndTime = trainingEndTime;
     }
 
@@ -127,7 +139,7 @@ public class TrainingTopics {
         return updateDate;
     }
 
-    public void setTrainingId(Timestamp updateDate){
+    public void setUpdateDate(Timestamp updateDate){
         this.updateDate = updateDate;
     }
 }
