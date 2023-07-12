@@ -1,16 +1,14 @@
 package com.screen.screen001.controller;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.screen.screen001.dto.TrainingTopics;
@@ -24,16 +22,29 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserController {
 
     
-    private UserDetails userDetails;
+    
 
     @Autowired
     private AdminService adminService;
 
     @GetMapping("/menu")
 
-    String menu(Model model) {
+    String menu(Model model, Authentication authentication) {
         List<TrainingTopics> topics = adminService.getAllTrainingTopics();
-        System.out.println(topics);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        System.out.println(userDetails.getAuthorities());
+        boolean isAdmin;
+        if(String.valueOf(userDetails.getAuthorities().toArray()[0]).equals("ROLE_ADMIN")){
+            isAdmin = true;
+        } else{
+            isAdmin = false;
+
+        }
+
+
+        model.addAttribute("role", isAdmin);
+        
         
         model.addAttribute("listOfTopics", topics);
         return "menu";
@@ -47,7 +58,6 @@ public class UserController {
         String id = temp[1];
 
         List<TrainingTopics> topics = adminService.getTopicsById(id);
-        System.out.println("HELLLOOOOO "+topics);
 
         model.addAttribute("topic", topics);
 

@@ -2,6 +2,9 @@ package com.screen.screen001.config;
 
 
 import lombok.RequiredArgsConstructor;
+
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+
 import com.screen.screen001.repository.UserRepository;
 
 @Configuration
@@ -23,10 +27,11 @@ public class ApplicationConfig {
 
   @Bean
   public UserDetailsService userDetailsService() {
-
     
-    return username -> repository.findByMemberId(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    
+    return username -> repository.findByMemberId(username) 
+    .filter(isDeleted -> isDeleted.getDeleteFlag().equals("0"))
+    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
   }
 
   @Bean

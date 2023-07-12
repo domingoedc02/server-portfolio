@@ -1,26 +1,28 @@
 package com.screen.screen001.services;
 
 import com.screen.screen001.token.Token;
-import com.screen.screen001.token.TokenRepository;
 import com.screen.screen001.token.TokenType;
 import com.screen.screen001.auth.AuthenticationRequest;
 import com.screen.screen001.auth.AuthenticationResponse;
 import com.screen.screen001.auth.RegisterRequest;
 import com.screen.screen001.entity.Role;
 import com.screen.screen001.entity.User;
+import com.screen.screen001.repository.TokenRepository;
 import com.screen.screen001.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,6 +36,29 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+
+  @Autowired
+  private JavaMailSender javaMailSender;
+
+
+  public void sendEmail(
+      String toEmail,
+      String subject,
+      String body
+  ){
+    MimeMessage message = javaMailSender.createMimeMessage();
+    MimeMessageHelper messageHelper = new MimeMessageHelper(message, "utf-8");
+    try{
+      messageHelper.setFrom("noreply.screen001@gmail.com", "株式会社SCREEN");
+      messageHelper.setTo(toEmail);
+      messageHelper.setText(body, true);
+      messageHelper.setSubject(subject);
+    } catch(Exception e){
+
+    }
+
+    javaMailSender.send(message);
+  }
   
 
 
@@ -54,6 +79,11 @@ public class AuthenticationService {
 
         .build();
     var savedUser = repository.save(user);
+
+    //HTML template of body
+    String bodyTemplate = "<h5> Member ID: "+request.getMemberId()+"</h5> <h5> Password: "+request.getPassword()+"</h5>";
+
+    sendEmail(request.getEmail(), "WELCOME TO SCREEN", bodyTemplate);
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
@@ -65,15 +95,17 @@ public class AuthenticationService {
 
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    
     authenticationManager.authenticate(
+        
         new UsernamePasswordAuthenticationToken(
             request.getMemberId(),
             request.getPassword()
         )
     );
+
     var user = repository.findByMemberId(request.getMemberId())
         .orElseThrow();
-    System.out.println("Logged in with delete flag ------- "+user.getDeleteFlag());
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);

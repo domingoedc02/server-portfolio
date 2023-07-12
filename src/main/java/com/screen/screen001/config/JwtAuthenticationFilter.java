@@ -1,18 +1,18 @@
 package com.screen.screen001.config;
 
+import com.screen.screen001.repository.TokenRepository;
 import com.screen.screen001.services.JwtService;
-import com.screen.screen001.token.TokenRepository;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.beans.Transient;
-import java.io.IOException;
-import java.security.Security;
 
-import jakarta.transaction.TransactionScoped;
-import jakarta.transaction.Transactional;
+import java.io.IOException;
+
+
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

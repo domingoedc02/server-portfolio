@@ -9,35 +9,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// import static com.screen.screen001.entity.Permission.ADMIN_CREATE;
-// import static com.screen.screen001.entity.Permission.ADMIN_DELETE;
-// import static com.screen.screen001.entity.Permission.ADMIN_READ;
-// import static com.screen.screen001.entity.Permission.ADMIN_UPDATE;
-
 
 @RequiredArgsConstructor
 public enum Role {
   
   USER(Collections.emptySet()),
-  ADMIN(
-          Set.of(
-                //   ADMIN_READ,
-                //   ADMIN_UPDATE,
-                //   ADMIN_DELETE,
-                //   ADMIN_CREATE
-          )
-  )
-//   ,
-//   MANAGER(
-//           Set.of(
-//                   MANAGER_READ,
-//                   MANAGER_UPDATE,
-//                   MANAGER_DELETE,
-//                   MANAGER_CREATE
-//           )
-//   )
-
-  ;
+  ADMIN(Set.of());
 
   @Getter
   private final Set<Permission> permissions;

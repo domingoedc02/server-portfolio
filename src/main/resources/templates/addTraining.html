@@ -44,11 +44,11 @@
         <div class="row">
             <div class="border">
                 <div class="col column">
-                    <a href="#" class="float-right">戻る</a>
+                    <a th:href="@{/screen001/adminmenu}" class="float-right">戻る</a>
                     <h2 class="text-center">研修登録</h2>
 
                     <div class="px-5">
-                        <form role="form" method="post" th:action="@{/screen001/form/trainingadd}" th:object="${topics}">
+                        <form method="post" th:action="@{/screen001/form/trainingadd}" th:object="${topics}">
                             <div id="successAlert" class="alert alert-success alert-dismissible mt-5" style="display: none;">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <strong id="successTrainingName"></strong> 
@@ -60,15 +60,15 @@
                             </div>
                             <div class="form-group mt-3">
                                 <label for="trainingDate">研修日</label>
-                                <input type="date" id="trainingDate" name="trainingDate">
+                                <input type="date" id="trainingDate" name="trainingDate" th:field="*{trainingDate}">
                             </div>
                             <div class="form-group mt-3"> 
                                 <label for="trainingStartTime">開始時間</label>
                                 <input class="mx-3" type="time" id="trainingStartTime" name="trainingStartTime"
-                                    min="06:00" max="20:00">
+                                    min="06:00" max="20:00" th:field="*{trainingStartTime}">
                                 <label for="trainingEndTime" class="mx-3">終了時間</label>
                                 <input type="time" id="trainingEndTime" name="trainingEndTime"
-                                    min="06:00" max="20:00" >
+                                    min="06:00" max="20:00" th:field="*{trainingEndTime}">
                             </div>
                             
                               
@@ -77,9 +77,9 @@
                                 <textarea class="float-right" name="details" id="details" cols="35" rows="5" th:field="*{trainingDetails}"></textarea>
                             </div>
 
-
-
-                            <button type="button" onclick="addTraining()" class="btn btn-primary w-100 my-5">登録</button>
+                            <!-- <input type="hidden" name="_method" value="post" />
+                            <button type="submit" class="btn btn-primary w-100 my-5">登録</button> -->
+                            <button type="button" onclick="addTraining()" class="btn btn-primary w-100 my-5">登録</button> 
                             <script>
                                 // Data Picker Initialization
                                 
@@ -108,6 +108,7 @@
                                         .then(response => response.json())
                                         .then(data => {
                                             if(data["trainingId"] !== null || data["trainingId"] !== ""){
+                                                // window.location.replace("/screen001/trainingadd?success=true?trainingId=")
                                                 document.getElementById("name").value = "";
                                                 document.getElementById("trainingDate").value = "";
                                                 document.getElementById("trainingStartTime").value = "";
@@ -119,9 +120,8 @@
                                             }
                                         })
                                     }
-                                    
                                 }
-                            </script>
+                            </script> 
                         </form>
                     </div>
                 </div>

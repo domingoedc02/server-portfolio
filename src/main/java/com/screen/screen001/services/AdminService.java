@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,8 @@ public class AdminService {
     private UserRepository userRepository;
 
     public void saveTrainingTopics(TrainingTopics topic){
+
+        
         // topic.builder().build();
         TrainingTopics topics = TrainingTopics
             .builder()
@@ -73,12 +74,12 @@ public class AdminService {
 
     public List<TrainingTopics> getTopicsById(String trainingId){
         Iterable<TrainingTopics> findTopic = topicsRepository.findByTrainingId(trainingId);
-
+        
         List<TrainingTopics> topics = new ArrayList<>();
 
         findTopic.forEach(data -> {
-            
-            topics.add(TrainingTopics
+            if(data.getDeleteFlag().equals("0")){
+                topics.add(TrainingTopics
                 .builder()
                 .trainingId(data.getTrainingId())
                 .trainingName(data.getTrainingName())
@@ -92,6 +93,8 @@ public class AdminService {
                 .updateDate(data.getUpdateDate())
                 .build()
             );
+            }
+            
         });
 
         return topics;
@@ -102,7 +105,7 @@ public class AdminService {
         List<User> users = new ArrayList<>();
 
         findUser.forEach(user -> {
-            System.out.println(user.getDeleteFlag().equals("0"));
+            
             if(user.getDeleteFlag().equals("0")){
                 users.add(User
                     .builder()
@@ -115,10 +118,23 @@ public class AdminService {
         });
 
         Collections.reverse(users);
-        System.out.println(users.get(0));
+        
         return users;
 
     }
+
+    // public TrainingTopics deleteTrainingTopic(String trainingID, String updateMember) throws UsernameNotFoundException{
+    //     Iterable<TrainingTopics> topic = topicsRepository.findByTrainingId(trainingID);
+    //     // TrainingTopics training = (TrainingTopics) topicsRepository.findByTrainingId(trainingID);
+        
+    //     // Timestamp timestamp = new Timestamp(0);
+    //     // training.setDeleteFlag("1");
+    //     // training.setUpdateMember(updateMember);
+    //     // training.setUpdateDate(timestamp);
+
+        
+        
+    // }
 
     
 }

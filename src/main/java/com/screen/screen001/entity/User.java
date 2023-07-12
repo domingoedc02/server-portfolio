@@ -29,21 +29,29 @@ import com.screen.screen001.token.Token;
 public class User implements UserDetails {
   
   @Id
-  @Column(nullable = false, length = 5)
+  @Column(nullable = false, length = 5, unique = true)
   private String memberId;
+
   @Column(nullable = false, length = 320)
   private String password;
+
   @Column(nullable = false, length = 256)
   private String email;
+
   @Column(nullable = false, length = 40)
   private String memberName;
+
   @Column(nullable = false, length = 1)
   private String deleteFlag;
+
   @Column(nullable = false, length = 5)
   private String insertMember;
+
   private Timestamp insertDate;
+
   @Column(nullable = true, length = 5)
   private String updateMember;
+  
   private Timestamp updateDate;
   
   
@@ -51,6 +59,7 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 5)
   private Role adminFlag;
+
 
   @OneToMany(mappedBy = "user")
   private List<Token> tokens;

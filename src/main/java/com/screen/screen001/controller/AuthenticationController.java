@@ -4,15 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.screen.screen001.auth.AuthenticationRequest;
 import com.screen.screen001.auth.AuthenticationResponse;
 import com.screen.screen001.auth.RegisterRequest;
@@ -20,7 +17,7 @@ import com.screen.screen001.services.AuthenticationService;
 
 import java.io.IOException;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @CrossOrigin
@@ -51,5 +48,16 @@ public class AuthenticationController {
   ) throws IOException {
     service.refreshToken(request, response);
   }
+
+  // @PostMapping("/logout")
+  // public RedirectView logoutPage (HttpServletRequest request, 
+  // HttpServletResponse response) {
+  //     Authentication auth = 
+  // SecurityContextHolder.getContext().getAuthentication();
+  //     if (auth != null){
+  //         new SecurityContextLogoutHandler().logout(request, response, auth);
+  //     }
+  //     return new RedirectView("/screen001/login");
+  // } 
 
 }

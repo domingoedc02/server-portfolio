@@ -32,7 +32,7 @@
         <div class="row">
             <div class="border">
                 <div class="col column">
-                    <a href="/api/v1/auth/logout" class="logout">ログアウト</a>
+                    <a th:href="@{/screen001/menu}" class="logout">戻る</a>
                     <h2 class="text-center mb-5">管理者メニュー</h2>
 
                     <h4 class="d-inline">研修一覧</h4>
@@ -44,7 +44,37 @@
                             </tr>
                             <tr th:each="topic : ${listOfTopics}">
                                 <td scope="row"><a th:href="@{'/screen001/trainingboard/' + ${topic.trainingId}}"><span th:text="${topic.trainingDate}"></span> <span th:text="${topic.trainingName}"></span></a></td>
-                                <td class="w-25 "><button class="d-block mx-auto btn btn-primary">削除</button></td>
+                                <td class="w-25 ">
+                                    <!-- <a class="d-block mx-auto btn btn-primary" role="button" th:href="@{'/screen001/delete/' + ${topic.trainingId}}">削除</a> -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" th:attr="data-target='#deleteId' + ${topic.trainingId}">
+                                        削除
+                                      </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" th:id="'deleteId' + ${topic.trainingId}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle" th:text="研修削除"></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <strong th:text="${topic.trainingName}"></strong>
+                                                を削除しますか?
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
+                                            <form th:action="@{'/screen001/training/delete/' + ${topic.trainingId}}" th:method="put">
+                                                <input type="hidden" name="_method" value="put" />
+                                                <button type="submit" class="btn btn-danger" >はい</button>
+                                            </form>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -58,7 +88,41 @@
                                     <span th:text="${user.memberId}"></span> &nbsp;&nbsp;&nbsp;&nbsp; <span th:text="${user.memberName}"></span>
                                 </span></td>
                                 
-                                <td class="w-25 "><button class="d-block mx-auto btn btn-primary">削除</button></td>
+                                <td class="w-25 ">
+                                    <!-- <form th:action="@{/screen001/delete/TF634}" method="PUT">
+                                        inp
+                                    </form> -->
+                                    <!-- <a th:href="@{}"></a> -->
+                                    <!-- <button class="d-block mx-auto btn btn-primary" th:href="@{/menu}">削除</button> -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" th:attr="data-target='#deleteId' + ${user.memberId}">
+                                        削除
+                                      </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" th:id="'deleteId' + ${user.memberId}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle" th:text="メンバー削除"></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <strong th:text="${user.memberName}"></strong>
+                                                を削除しますか?
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
+                                            <form th:action="@{'/screen001/user/delete/' + ${user.memberId}}" th:method="put">
+                                                <input type="hidden" name="_method" value="put" />
+                                                <button type="submit" class="btn btn-danger" >はい</button>
+                                            </form>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

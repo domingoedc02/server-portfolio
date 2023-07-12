@@ -37,7 +37,8 @@
         <div class="row">
             <div class="border">
                 <div class="col column">
-                    <a href="/api/v1/auth/logout" class="logout">ログアウト</a>
+                    
+                    <a th:href="@{/api/v1/auth/logout}" class="logout">ログアウト</a>
                     <h2 class="text-center">TOPメニュー</h2>
                     
                     <h5 class="mt-5">研修一覧</h5>
@@ -55,9 +56,14 @@
                             
                         </tbody>
                     </table>
-                
+                    
+
+                    
+                    
                     <a class="d-block my-5" th:href="@{/screen001/memberlist}">メンバー一覧</a>
-                    <a class="d-block my-5" th:href="@{/screen001/adminmenu}">管理者メニュー</a>
+                    <div th:switch="${role}">
+                        <a th:case="true" class="d-block my-5" th:href="@{/screen001/adminmenu}">管理者メニュー</a>
+                    </div>
 
                 </div>
             </div>
