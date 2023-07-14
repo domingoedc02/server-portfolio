@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,21 +27,8 @@ public class UserController {
 
     @GetMapping("/menu")
 
-    String menu(Model model, Authentication authentication) {
+    String menu(Model model) {
         List<TrainingTopics> topics = adminService.getAllTrainingTopics();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        System.out.println(userDetails.getAuthorities());
-        boolean isAdmin;
-        if(String.valueOf(userDetails.getAuthorities().toArray()[0]).equals("ROLE_ADMIN")){
-            isAdmin = true;
-        } else{
-            isAdmin = false;
-
-        }
-
-
-        model.addAttribute("role", isAdmin);
         
         
         model.addAttribute("listOfTopics", topics);
@@ -58,16 +43,16 @@ public class UserController {
         String id = temp[1];
 
         List<TrainingTopics> topics = adminService.getTopicsById(id);
+        System.out.println("HELLLOOOOO "+topics);
 
         model.addAttribute("topic", topics);
-
 
 
         return "trainingBoard";
     }
 
     @GetMapping("/trainingboard/{id}/edit")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     String trainingBoardEdit(Model model) {
         return "trainingBoardEdit";
     }

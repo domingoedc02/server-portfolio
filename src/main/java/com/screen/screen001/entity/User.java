@@ -58,15 +58,14 @@ public class User implements UserDetails {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 5)
-  private Role adminFlag;
-
+  private Role authority;
 
   @OneToMany(mappedBy = "user")
   private List<Token> tokens;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return adminFlag.getAuthorities();
+    return authority.getAuthorities();
   }
 
   @Override

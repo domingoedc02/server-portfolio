@@ -70,7 +70,7 @@ public class AuthenticationService {
     .memberId(request.getMemberId())
     .email(request.getEmail())
     .password(passwordEncoder.encode(request.getPassword()))
-    .adminFlag(Role.USER)
+    .authority(Role.USER)
     .deleteFlag("0")
     .insertMember(request.getInsertMember())
     .insertDate(timestamp)

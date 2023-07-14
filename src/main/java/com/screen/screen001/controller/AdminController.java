@@ -133,15 +133,15 @@ public class AdminController {
             
         });
 
-        int number = Collections.max(users) + 1; 
+        int number = 0;
+        if(users.size() == 0){
+            number += 1;
+        } else{
+            number = Collections.max(users) + 1; 
+        }
         
         String id = "SC" + String.format("%03d", number); 
         model.addAttribute("memberIdNew", id);
-        
-        
-        
-
-
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         model.addAttribute("adminId", userDetails.getUsername());
@@ -166,6 +166,8 @@ public class AdminController {
         return "addMember";
     }
 
+
+
     @PutMapping(value = "/training/delete/{id}")
     // @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String deleteTraining(@PathVariable("id") String id, Authentication authentication, Model model){
@@ -181,6 +183,28 @@ public class AdminController {
             trainingTopicsRepository.save(trainingTopics);
             // return new ResponseEntity<>(trainingTopicsRepository.save(trainingTopics), HttpStatus.OK);
             return "redirect:/screen001/adminmenu";
+        } else {
+            // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return "redirect:/screen001/adminmenu?error=true";
+          }
+
+    }
+
+    @PutMapping(value = "/training/update/{id}")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String updateraining(@PathVariable("id") String id, Authentication authentication, Model model, @RequestBody RequestBody requestBody){
+        Optional<TrainingTopics> topic = trainingControllerRepository.findByTrainingId(id);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        if(topic.isPresent()){
+            TrainingTopics trainingTopics = topic.get();
+            
+            trainingTopics.setUpdateMember(userDetails.getUsername());
+            trainingTopics.setUpdateDate(timestamp);
+            trainingTopicsRepository.save(trainingTopics);
+            // return new ResponseEntity<>(trainingTopicsRepository.save(trainingTopics), HttpStatus.OK);
+            return "redirect:/screen001/trainingboard/" + id + "/edit";
         } else {
             // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return "redirect:/screen001/adminmenu?error=true";
