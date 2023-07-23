@@ -50,7 +50,14 @@
                             </tr>
 
                             <tr th:each="topics : ${listOfTopics}">
-                                <th class="new-badge"><span class="badge badge-warning">NEW</span></th>
+                                
+                                <!-- <div th:each="browse : ${browse}">
+                                    <div th:switch="${browse.trainingId}">
+                                        <th class="new-badge"><span class="badge badge-warning" >NEW</span></th>
+                                        <th th:case="*"></th>
+                                    </div>  
+                                </div> -->
+                                <th class="new-badge"><span class="badge badge-warning" >NEW</span></th>
                                 <td scope="row"> <a th:href="@{'/screen001/trainingboard/' + ${topics.trainingId}}"><span th:text="${topics.trainingDate}"></span> <span th:text="${topics.trainingName}"></span></a></td>
                             </tr>
                             

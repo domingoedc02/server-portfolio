@@ -56,11 +56,11 @@
                             </div>
                             <div class="form-group mt-5">
                                 <label for="name">研修名</label>
-                                <input type="text" class="form-control" id="name" placeholder="XXXX" th:field="*{trainingName}">
+                                <input type="text" class="form-control" id="name" placeholder="XXXX" th:field="*{trainingName}" required>
                             </div>
                             <div class="form-group mt-3">
                                 <label for="trainingDate">研修日</label>
-                                <input type="date" id="trainingDate" name="trainingDate" th:field="*{trainingDate}">
+                                <input type="date" id="trainingDate" name="trainingDate" th:field="*{trainingDate}" required>
                             </div>
                             <div class="form-group mt-3"> 
                                 <label for="trainingStartTime">開始時間</label>
@@ -74,12 +74,12 @@
                               
                             <div class="form-group mt-3">
                                 <label for="details">掲示板</label>
-                                <textarea class="float-right" name="details" id="details" cols="35" rows="5" th:field="*{trainingDetails}"></textarea>
+                                <textarea class="float-right" name="details" id="details" cols="35" rows="5" th:field="*{trainingDetails}" required></textarea>
                             </div>
 
-                            <!-- <input type="hidden" name="_method" value="post" />
-                            <button type="submit" class="btn btn-primary w-100 my-5">登録</button> -->
-                            <button type="button" onclick="addTraining()" class="btn btn-primary w-100 my-5">登録</button> 
+                            <input type="hidden" name="_method" value="post" />
+                            <button type="submit" class="btn btn-primary w-100 my-5">登録</button>
+                            <!-- <button type="button" onclick="addTraining()" class="btn btn-primary w-100 my-5">登録</button>  -->
                             <script>
                                 // Data Picker Initialization
                                 

@@ -11,7 +11,7 @@
 	<groupId>com.screen</groupId>
 	<artifactId>screen001</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>screen001</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>

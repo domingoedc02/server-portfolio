@@ -35,6 +35,41 @@
                     <a th:href="@{/screen001/menu}" class="logout">戻る</a>
                     <h2 class="text-center mb-5">管理者メニュー</h2>
 
+
+                    <!-- User Added Alert -->
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" id="success" style="display: none;">
+                        <strong id="memberId"></strong> ユーザーが正常に追加されました。
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="alert alert-danger alert-dismissible fade show" role="alert" id="invalid" style="display: none;">
+                        ユーザーは既に存在します! もう一度試してください
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="alert alert-danger alert-dismissible fade show" role="alert" id="databaseError" style="display: none;">
+                        入力エラー! 再度入力するか、管理者にお問い合わせください。
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    <!-- Training Topic Added Alert -->
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" id="successTraining" style="display: none;">
+                        <strong id="trainingId"></strong> 研修が正常に追加されました。
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="alert alert-danger alert-dismissible fade show" role="alert" id="invalidTraining" style="display: none;">
+                        研修は既に存在します! もう一度試してください
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                    <!--  -->
                     <h4 class="d-inline">研修一覧</h4>
                     <a th:href="@{/screen001/trainingadd}" class="float-right">研修登録</a>
                     <table class="table mb-5" >
@@ -131,7 +166,7 @@
         </div>
     </div>
 
-    <!-- <script src="./scripts/login.js"></script> -->
+    <script type="text/javascript" th:src="@{/scripts/admin.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

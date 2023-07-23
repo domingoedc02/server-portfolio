@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.TimeZoneColumn;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -35,10 +37,10 @@ public class TrainingTopics {
     private String deleteFlag;
 
     @Column(nullable = true)
-    private Time trainingStartTime;
+    private String trainingStartTime;
 
     @Column(nullable = true)
-    private Time trainingEndTime;
+    private String trainingEndTime;
 
     @Column(nullable = true, length = 4000)
     private String trainingDetails;
@@ -87,19 +89,19 @@ public class TrainingTopics {
         this.trainingDate = trainingDate;
     }
 
-    public Time getTrainingStartTime(){
+    public String getTrainingStartTime(){
         return trainingStartTime;
     }
 
-    public void setTrainingStartTime(Time trainingStartTime){
+    public void setTrainingStartTime(String trainingStartTime){
         this.trainingStartTime= trainingStartTime;
     }
 
-    public Time getTrainingEndTime(){
+    public String getTrainingEndTime(){
         return trainingEndTime;
     }
 
-    public void setTrainingEndTime(Time trainingEndTime){
+    public void setTrainingEndTime(String trainingEndTime){
         this.trainingEndTime = trainingEndTime;
     }
 

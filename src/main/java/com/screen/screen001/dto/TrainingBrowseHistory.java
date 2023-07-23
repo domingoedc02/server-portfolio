@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,10 +22,12 @@ import lombok.NoArgsConstructor;
 public class TrainingBrowseHistory {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     @Column(nullable = false, length = 5)
     private String memberId;
 
-    @Id
     @Column(nullable = false, length = 5)
     private String trainingId;
 

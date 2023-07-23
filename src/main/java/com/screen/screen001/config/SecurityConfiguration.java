@@ -36,7 +36,7 @@ public class SecurityConfiguration {
         
         .authorizeHttpRequests( (request) -> request
           .requestMatchers(
-                "/api/v1/auth/authentication", "/api/v1/auth/register", "/screen001/delete/**"
+                "/api/v1/auth/authentication", "/api/v1/auth/register", "/screen001/delete/**", "/screen001/forgotpassword", "/screen001/resetpassword"
           ).permitAll()
           // .requestMatchers("/screen001/menu").hasAuthority("ROLE_USER")
           .anyRequest().authenticated()

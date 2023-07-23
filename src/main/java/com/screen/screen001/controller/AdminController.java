@@ -1,6 +1,7 @@
 package com.screen.screen001.controller;
 
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.screen.screen001.dto.TrainingTopics;
+import com.screen.screen001.entity.Role;
 import com.screen.screen001.entity.User;
 import com.screen.screen001.repository.TrainingControllsRepository;
 import com.screen.screen001.repository.TrainingTopicsRepository;
+import com.screen.screen001.repository.UserControllerRepository;
 import com.screen.screen001.repository.UserRepository;
 import com.screen.screen001.services.AdminService;
 
@@ -54,8 +58,6 @@ public class AdminController {
     private AdminService adminService;
 
 
-    
-
     @GetMapping("/adminmenu")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     String adminMenu(Model model) {
@@ -76,24 +78,17 @@ public class AdminController {
     }
 
     @PostMapping(value = "/form/trainingadd")
-    public ResponseEntity<TrainingTopics> addNewTraining(
-        @RequestBody TrainingTopics trainingTopics, Authentication authentication, @ModelAttribute("") TrainingTopics tTopic
+    public String addNewTraining(
+        TrainingTopics trainingTopics, Authentication authentication, @ModelAttribute("") TrainingTopics tTopic
     ) throws Exception{
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
+        
         Iterable<TrainingTopics> findTopic = trainingTopicsRepository.findAll();
         ArrayList<Integer> training = new ArrayList<>();
 
         findTopic.forEach(ttopic -> {
-            
-            if(ttopic.getDeleteFlag().equals("0") && ttopic.getTrainingId().startsWith("TR")){
                 String[] id = (ttopic.getTrainingId()).split("TR");
-
                 training.add(Integer.parseInt(id[1]));
-            }
-
-
-            
         });
         int number = 0;
         if(training.size() == 0){
@@ -104,17 +99,23 @@ public class AdminController {
 
         String id = "TR" + String.format("%03d", number);
 
+        Optional<TrainingTopics> newTraining = trainingControllerRepository.findByTrainingId(id);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        trainingTopics.setDeleteFlag("0");
-        
-        trainingTopics.setTrainingId(id);
-        trainingTopics.setInsertMember(userDetails.getUsername());;
-        trainingTopics.setInsertDate(timestamp);
-        trainingTopics.setUpdateMember(userDetails.getUsername());
-        trainingTopics.setUpdateDate(timestamp);
 
-        adminService.saveTrainingTopics(trainingTopics);
-        return new ResponseEntity<>(trainingTopics, HttpStatus.CREATED);
+        if(!(newTraining.isPresent())){
+            trainingTopics.setDeleteFlag("0");
+        
+            trainingTopics.setTrainingId(id);
+            trainingTopics.setInsertMember(userDetails.getUsername());;
+            trainingTopics.setInsertDate(timestamp);
+            trainingTopics.setUpdateMember(userDetails.getUsername());
+            trainingTopics.setUpdateDate(timestamp);
+
+            adminService.saveTrainingTopics(trainingTopics);
+            return "redirect:/screen001/adminmenu?trainingadd-successfull=true?trainingId="+id;
+        } else{
+            return "redirect:/screen001/adminmenu?trainingadd-successfull=false?message=trainingId is already used.";
+        }
     }
 
     @GetMapping("/memberadd")
@@ -122,15 +123,9 @@ public class AdminController {
     String addMember(Model model, Authentication authentication) {
         Iterable<User> findUser = userRepository.findAll();
         ArrayList<Integer> users = new ArrayList<>();
-
         findUser.forEach(user -> {
-            
-            if(user.getDeleteFlag().equals("0") && user.getMemberId().startsWith("SC")){
                 String[] id = (user.getMemberId()).split("SC");
-
                 users.add(Integer.parseInt(id[1]));
-            }
-            
         });
 
         int number = 0;
@@ -141,13 +136,9 @@ public class AdminController {
         }
         
         String id = "SC" + String.format("%03d", number); 
-        model.addAttribute("memberIdNew", id);
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("adminId", userDetails.getUsername());
 
         User user = new User();
-        model.addAttribute("user", user);
+        
         //Generate Password
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
@@ -161,9 +152,49 @@ public class AdminController {
         }
         String generatedString = buffer.toString();
         
+        user.setPassword(generatedString);
+        user.setMemberId(id);
+        model.addAttribute("user", user);
 
         model.addAttribute("temporaryPassword", generatedString);
         return "addMember";
+    }
+
+    @PostMapping(path = "/form/memberadd", consumes = "application/x-www-form-urlencoded")
+    String addNewMember(User user, Authentication authenticate, Model model){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
+        
+        Iterable<User> userAccount = userRepository.findAll();
+        ArrayList<Integer> users = new ArrayList<>();
+        userAccount.forEach(userProfile -> {
+            String[] id = (userProfile.getMemberId()).split("SC");
+            users.add(Integer.parseInt(id[1]));
+        });
+        int number = 0;
+        if(users.size() == 0){
+            number += 1;
+        } else{
+            number = Collections.max(users) + 1; 
+        }
+
+        String id = "SC" + String.format("%03d", number);
+
+        Optional<User> optionalUser = userRepository.findByMemberId(id);
+        if(!(optionalUser.isPresent())){
+            try{
+                adminService.saveUser(user, userDetails.getUsername());
+                
+                return "redirect:/screen001/adminmenu?user-added-successfull=true?userId="+id;
+            } catch (Exception e){
+                System.out.println(e);
+                return "redirect:/screen001/adminmenu?user-added-successfull=false?message=database-error";
+            }
+        } else{
+            return "redirect:/screen001/adminmenu?user-added-successfull=false?message=invalid-user";
+        }
+
+        
     }
 
 
@@ -190,21 +221,57 @@ public class AdminController {
 
     }
 
-    @PutMapping(value = "/training/update/{id}")
+    @PutMapping(path = "/training/update/{id}", consumes = "application/json")
     // @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String updateraining(@PathVariable("id") String id, Authentication authentication, Model model, @RequestBody RequestBody requestBody){
+    public String updateTraining1(@PathVariable("id") String id , Authentication authentication, Model model, @RequestBody TrainingTopics training) throws Exception{
         Optional<TrainingTopics> topic = trainingControllerRepository.findByTrainingId(id);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
+        // Time startTime = Time.valueOf(String.valueOf(training.getTrainingStartTime() + ":00"));
+        // Time endTime = Time.valueOf(String.valueOf(training.getTrainingEndTime() + ":00"));
+        // System.out.println(startTime.getTime());
         if(topic.isPresent()){
             TrainingTopics trainingTopics = topic.get();
-            
+            trainingTopics.setTrainingName(training.getTrainingName());
+            trainingTopics.setTrainingDate(training.getTrainingDate());
+            // trainingTopics.setTrainingStartTime(startTime);
+            // trainingTopics.setTrainingEndTime(endTime);
+            trainingTopics.setTrainingDetails(training.getTrainingDetails());
             trainingTopics.setUpdateMember(userDetails.getUsername());
             trainingTopics.setUpdateDate(timestamp);
             trainingTopicsRepository.save(trainingTopics);
             // return new ResponseEntity<>(trainingTopicsRepository.save(trainingTopics), HttpStatus.OK);
-            return "redirect:/screen001/trainingboard/" + id + "/edit";
+            return "redirect:/screen001/trainingboard" + id;
+        } else {
+            // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return "redirect:/screen001/adminmenu?error=true";
+          }
+
+    }
+
+    @PutMapping(path = "/training/update/{id}", consumes = "application/x-www-form-urlencoded")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String updateTraining2(@PathVariable("id") String id , Authentication authentication, Model model, TrainingTopics training){
+        Optional<TrainingTopics> topic = trainingControllerRepository.findByTrainingId(id);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String[] tempStartTime = String.valueOf(training.getTrainingStartTime()).split(":");
+        String[] tempEndTime = String.valueOf(training.getTrainingEndTime()).split(":");
+        System.out.println(tempStartTime.length);
+        System.out.println(tempEndTime.length);
+               
+        if(topic.isPresent()){
+            TrainingTopics trainingTopics = topic.get();
+            trainingTopics.setTrainingName(training.getTrainingName());
+            trainingTopics.setTrainingDate(training.getTrainingDate());
+            trainingTopics.setTrainingStartTime(training.getTrainingStartTime());
+            trainingTopics.setTrainingEndTime(training.getTrainingEndTime());
+            trainingTopics.setTrainingDetails(training.getTrainingDetails());
+            trainingTopics.setUpdateMember(userDetails.getUsername());
+            trainingTopics.setUpdateDate(timestamp);
+            trainingTopicsRepository.save(trainingTopics);
+            // return new ResponseEntity<>(trainingTopicsRepository.save(trainingTopics), HttpStatus.OK);
+            return "redirect:/screen001/trainingboard/" + id + "?update-successfull=true";
         } else {
             // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return "redirect:/screen001/adminmenu?error=true";

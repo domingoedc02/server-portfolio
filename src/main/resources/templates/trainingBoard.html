@@ -32,14 +32,18 @@
                 <div class="col column" >
                     <a th:href="@{/screen001/adminmenu}" class="logout">戻る</a>
                     <h2 class="text-center">研修掲示板</h2>
+                    
                     <div th:if="${topic.empty}">
                         <h2>No data available</h2>
                     </div>
 
                     
                     <div th:each="topic : ${topic}">
+                        <div id="isSuccessAlert" class="alert alert-success" style="display: none;">
+                            <strong th:text="${topic.trainingId}">Success!</strong> の変更しました。
+                        </div>
                         <h4 class="mt-4" th:text="${topic.trainingName}">〇〇〇〇〇</h4>
-                        <h4 class="my-3"><span th:text="${topic.trainingDate}"></span>　<span th:text="${topic.trainingStartTime}"></span> - <span th:text="${topic.trainingEndTime}"></span></h4>
+                        <h4 class="my-3"><span th:text="${topic.trainingDate}"></span>　<span th:text="${startTime}"></span> - <span th:text="${endTime}"></span></h4>
                         <!-- <h4 class="my-3">23/03/11</h4> -->
                         <h4 class="my-3">●●●●</h4>
                         <p class="w-75 my-3" th:text="${topic.trainingDetails}">
@@ -56,7 +60,9 @@
         </div>
     </div>
 
-    <!-- <script src="./scripts/login.js"></script> -->
+
+
+    <script type="text/javascript" th:src="@{/scripts/trainingBoard.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

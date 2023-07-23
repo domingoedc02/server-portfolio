@@ -1,16 +1,25 @@
 package com.screen.screen001.services;
 
+
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.screen.screen001.dto.TrainingTopics;
+import com.screen.screen001.entity.Role;
 import com.screen.screen001.entity.User;
 import com.screen.screen001.repository.TrainingTopicsRepository;
 import com.screen.screen001.repository.UserRepository;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class AdminService {
@@ -20,6 +29,31 @@ public class AdminService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+
+    public void sendEmail(
+        String toEmail,
+        String subject,
+        String body
+    ){
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message, "utf-8");
+        try{
+        messageHelper.setFrom("noreply.screen001@gmail.com", "株式会社SCREEN");
+        messageHelper.setTo(toEmail);
+        messageHelper.setText(body, true);
+        messageHelper.setSubject(subject);
+        } catch(Exception e){
+
+        }
+
+        javaMailSender.send(message);
+    }
 
     public void saveTrainingTopics(TrainingTopics topic){
 
@@ -41,6 +75,29 @@ public class AdminService {
             .build();
             
         topicsRepository.save(topics);
+    }
+
+    public void saveUser(User user, String inputUser){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        User users = User
+            .builder()
+            .memberId(user.getMemberId())
+            .authority(Role.USER)
+            .deleteFlag("0")
+            .email(user.getEmail())
+            .memberName(user.getMemberName())
+            .password(passwordEncoder.encode(user.getPassword()))
+            .insertMember(inputUser)
+            .insertDate(timestamp)
+            .updateMember(inputUser)
+            .updateDate(timestamp)
+            .build();
+        
+        if(user.getMemberId() != null && user.getPassword() != null){
+            String bodyTemplate = "<h5> Member ID: "+user.getMemberId()+"</h5> <h5> Password: "+user.getPassword()+"</h5>";
+            sendEmail(user.getEmail(), "WELCOME TO SCREEN", bodyTemplate);
+        }
+        userRepository.save(users);
     }
 
     public List<TrainingTopics> getAllTrainingTopics(){
@@ -105,7 +162,6 @@ public class AdminService {
         List<User> users = new ArrayList<>();
 
         findUser.forEach(user -> {
-            
             if(user.getDeleteFlag().equals("0")){
                 users.add(User
                     .builder()
@@ -114,7 +170,6 @@ public class AdminService {
                     .build()
                 );
             }
-            
         });
 
         Collections.reverse(users);

@@ -5,8 +5,10 @@ import com.screen.screen001.token.TokenType;
 import com.screen.screen001.auth.AuthenticationRequest;
 import com.screen.screen001.auth.AuthenticationResponse;
 import com.screen.screen001.auth.RegisterRequest;
+import com.screen.screen001.entity.MemberProfile;
 import com.screen.screen001.entity.Role;
 import com.screen.screen001.entity.User;
+import com.screen.screen001.repository.MemberProfileRepository;
 import com.screen.screen001.repository.TokenRepository;
 import com.screen.screen001.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +34,7 @@ import java.sql.Timestamp;
 @RequiredArgsConstructor
 public class AuthenticationService {
   private final UserRepository repository;
+  private final MemberProfileRepository profileRepository;
   private final TokenRepository tokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
@@ -80,6 +83,16 @@ public class AuthenticationService {
         .build();
     var savedUser = repository.save(user);
 
+    var userProfile = MemberProfile.builder()
+      .memberId(request.getMemberId())
+      .memberName(request.getMemberName())
+      .insertUser(request.getInsertMember())
+      .insertDate(timestamp)
+      .updateUser(request.getUpdateMember())
+      .updateDate(timestamp)
+      .build();
+    profileRepository.save(userProfile);
+
     //HTML template of body
     String bodyTemplate = "<h5> Member ID: "+request.getMemberId()+"</h5> <h5> Password: "+request.getPassword()+"</h5>";
 
@@ -91,7 +104,7 @@ public class AuthenticationService {
         .accessToken(jwtToken)
         .refreshToken(refreshToken)
         .build();
-  }
+    }
 
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {

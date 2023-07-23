@@ -8,7 +8,7 @@ import com.screen.screen001.dto.TrainingTopics;
 
 
 public interface TrainingControllsRepository extends CrudRepository<TrainingTopics, Integer>{
-
+    
     Optional<TrainingTopics> findByTrainingId(String trainingId);
     // Optional<TrainingTopics> findAll(String trainingId);
    
