@@ -15,7 +15,6 @@ import com.screen.screen001.auth.AuthenticationResponse;
 import com.screen.screen001.auth.RegisterRequest;
 import com.screen.screen001.services.AuthenticationService;
 
-import java.io.IOException;
 
 @Controller
 @RequestMapping("/api/v1/auth")
@@ -41,13 +40,6 @@ public class AuthenticationController {
     return ResponseEntity.ok(service.authenticate(request));
   }
 
-  @PostMapping("/refresh-token")
-  public void refreshToken(
-      HttpServletRequest request,
-      HttpServletResponse response
-  ) throws IOException {
-    service.refreshToken(request, response);
-  }
 
   // @PostMapping("/logout")
   // public RedirectView logoutPage (HttpServletRequest request, 

@@ -1,8 +1,6 @@
 package com.screen.screen001.controller;
 
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +13,14 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.HandlerMapping;
 
 import com.screen.screen001.dto.ChangePassword;
 import com.screen.screen001.entity.User;
@@ -71,7 +66,7 @@ public class LoginController {
     @GetMapping("/changepassword")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     String changePassword(Model model, Authentication authenticate) {
-        UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
+        
         
         List<ChangePassword> change = new ArrayList<ChangePassword>();
         change.add(new ChangePassword());

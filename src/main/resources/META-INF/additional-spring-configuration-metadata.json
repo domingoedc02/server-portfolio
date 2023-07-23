@@ -1,5 +1,17 @@
-{"properties": [{
-  "name": "spring.jpa.hibernate.show-sql",
-  "type": "java.lang.String",
-  "description": "A description for 'spring.jpa.hibernate.show-sql'"
-}]}
+{"properties": [
+  {
+    "name": "spring.jpa.hibernate.show-sql",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.hibernate.show-sql'"
+  },
+  {
+    "name": "spring.datasource.initialization",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialization'"
+  },
+  {
+    "name": "spring.jpa.hibernate.show-sql",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.hibernate.show-sql'"
+  }
+]}

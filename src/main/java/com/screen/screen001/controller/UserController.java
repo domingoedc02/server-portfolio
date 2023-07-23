@@ -1,11 +1,10 @@
 package com.screen.screen001.controller;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +27,6 @@ import com.screen.screen001.repository.MemberProfileControllerRepository;
 import com.screen.screen001.repository.MemberProfileRepository;
 import com.screen.screen001.repository.TrainingBrowseHistoryRepository;
 import com.screen.screen001.repository.TrainingControllsRepository;
-import com.screen.screen001.repository.TrainingTopicsRepository;
-import com.screen.screen001.repository.UserControllerRepository;
-import com.screen.screen001.repository.UserRepository;
 import com.screen.screen001.services.AdminService;
 import com.screen.screen001.services.UserService;
 
@@ -67,7 +63,7 @@ public class UserController {
         List<TrainingTopics> topics = adminService.getAllTrainingTopics();
         List<TrainingBrowseHistory> browse = new ArrayList<>();
         UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
-        List<TrainingBrowseHistory> history =  browseHistoryRepository.findAll();
+        // List<TrainingBrowseHistory> history =  browseHistoryRepository.findAll();
         String role = String.valueOf(userDetails.getAuthorities());
         boolean isAdmin = false;
         if(role.equals("[ROLE_ADMIN]")){
@@ -114,7 +110,7 @@ public class UserController {
         UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
         Optional<TrainingBrowseHistory> browse = browseHistoryRepository.findByTrainingId(id);
         Iterable<TrainingBrowseHistory> userBrowse = browseHistoryRepository.findByMemberId(userDetails.getUsername());
-        List<TrainingBrowseHistory> historyData = new ArrayList<>();
+        // List<TrainingBrowseHistory> historyData = new ArrayList<>();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         if(!browse.isPresent()){

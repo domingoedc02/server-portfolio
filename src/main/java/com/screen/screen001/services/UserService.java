@@ -2,7 +2,6 @@ package com.screen.screen001.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -86,4 +85,6 @@ public class UserService {
         String bodyTemplate = "<a href='"+url+"?token="+token+"''>Click here</a>";
         sendEmail(email, "パスワードさい再設定再設定依頼", bodyTemplate);
     }
+
+    
 }

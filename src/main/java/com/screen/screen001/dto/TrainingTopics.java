@@ -1,10 +1,8 @@
 package com.screen.screen001.dto;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 
-import org.hibernate.annotations.TimeZoneColumn;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

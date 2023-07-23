@@ -1,7 +1,6 @@
 package com.screen.screen001.controller;
 
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,12 +9,9 @@ import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,11 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.screen.screen001.dto.TrainingTopics;
-import com.screen.screen001.entity.Role;
 import com.screen.screen001.entity.User;
 import com.screen.screen001.repository.TrainingControllsRepository;
 import com.screen.screen001.repository.TrainingTopicsRepository;
-import com.screen.screen001.repository.UserControllerRepository;
 import com.screen.screen001.repository.UserRepository;
 import com.screen.screen001.services.AdminService;
 
@@ -162,7 +156,6 @@ public class AdminController {
 
     @PostMapping(path = "/form/memberadd", consumes = "application/x-www-form-urlencoded")
     String addNewMember(User user, Authentication authenticate, Model model){
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
         
         Iterable<User> userAccount = userRepository.findAll();
