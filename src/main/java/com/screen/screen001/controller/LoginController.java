@@ -91,7 +91,8 @@ public class LoginController {
                     updatePassword.setUpdateDate(timestamp);
                     userRepository.save(updatePassword);
                     userControlsRepo.save(updatePassword);
-                    return "redirect:/screen001/menu?changedPassword=true";
+                    SecurityContextHolder.clearContext();
+                    return "redirect:/api/v1/auth/logout";
                 } else{
                     return "redirect:/screen001/changepassword?changedPassword=false";
                 }

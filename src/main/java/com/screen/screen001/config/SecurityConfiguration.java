@@ -30,36 +30,36 @@ public class SecurityConfiguration {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf()
-        .disable()
-        
-        .authorizeHttpRequests( (request) -> request
-          .requestMatchers(
-                "/api/v1/auth/authentication", "/api/v1/auth/register", "/screen001/delete/**", "/screen001/forgotpassword", "/screen001/resetpassword"
-          ).permitAll()
-          // .requestMatchers("/screen001/menu").hasAuthority("ROLE_USER")
-          .anyRequest().authenticated()
-        )
-        // .and()
-        //   .sessionManagement()
-        //   .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        // .and()
-        .formLogin((form) -> form
-            .loginPage("/screen001/login")
-            .loginProcessingUrl("/api/v1/auth/authenticate")
-            // .successHandler(successHandler)
-            .defaultSuccessUrl("/screen001/menu", true)
-            .failureUrl("/screen001/login?error=true")
-            .usernameParameter("memberId")
-            .passwordParameter("password")
-            .permitAll()
-        )
-        .authenticationProvider(authenticationProvider)
-        // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-        .logout()
-        .logoutUrl("/api/v1/auth/logout")
-        .logoutSuccessUrl("/screen001/login?logout")
+      http
+              .csrf((csrf) -> csrf.disable())
+              // .disable()
+
+              .authorizeHttpRequests((request) -> request
+                              .requestMatchers(
+                                      "/api/v1/auth/authentication", "/api/v1/auth/register", "/screen001/delete/**", "/screen001/forgotpassword", "/screen001/resetpassword"
+                              ).permitAll()
+                              // .requestMatchers("/screen001/menu").hasAuthority("ROLE_USER")
+                              .anyRequest().authenticated()
+              )
+              // .and()
+              //   .sessionManagement()
+              //   .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+              // .and()
+              .formLogin((form) -> form
+                              .loginPage("/screen001/login")
+                              .loginProcessingUrl("/api/v1/auth/authenticate")
+                              // .successHandler(successHandler)
+                              .defaultSuccessUrl("/screen001/menu", true)
+                              .failureUrl("/screen001/login?error=true")
+                              .usernameParameter("memberId")
+                              .passwordParameter("password")
+                              .permitAll()
+              )
+              .authenticationProvider(authenticationProvider)
+              // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+              .logout(logout -> logout
+                      .logoutUrl("/api/v1/auth/logout")
+                      .logoutSuccessUrl("/screen001/login?logout"))
         // .addLogoutHandler(logoutHandler)
         // .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
     ;

@@ -137,7 +137,6 @@ public class UserController {
             });
         }
 
-
         List<TrainingTopics> topics = adminService.getTopicsById(id);
         String startTime = String.valueOf(topics.get(0).getTrainingStartTime());
         String endTime = String.valueOf(topics.get(0).getTrainingEndTime());
@@ -155,14 +154,10 @@ public class UserController {
 
         List<TrainingTopics> topic = adminService.getTopicsById(id);
         TrainingTopics training = trainingRepository.findByTrainingId(id).get();
-
-        
-
         
         model.addAttribute("trainingObj", training);
         model.addAttribute("trainingTopic", topic);
         model.addAttribute("trainingId", id);
-
         return "trainingBoardEdit";
     }
 
@@ -200,8 +195,6 @@ public class UserController {
     String showEditMyprofile(Model model, Authentication authenticate) {
         UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
         MemberProfile member = profileRepository.findByMemberId(userDetails.getUsername()).get();
-
-        
 
         model.addAttribute("profile", member);
         model.addAttribute("id", userDetails.getUsername());
