@@ -53,7 +53,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                             <!-- <form action="/screen001/training/update/TR001" onsubmit="updateTrainingTopics()" method="post" th:object="${trainingObj}">     -->
                                 <div class="form-group mt-5">
                                     <label for="name">研修名</label>
-                                    <input type="text"  id="trainingName" name="trainingName" th:field="*{trainingName}" required>
+                                    <input type="text"  id="trainingName" name="trainingName" th:field="*{trainingName}" maxlength="40" required>
                                 </div>
                                 <div class="form-group mt-0">
                                     <label for="trainingDate">研修日</label>
@@ -71,7 +71,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                                 </div>
                                 <div >
                                     <label for="trainingDetails">研修内容</label>
-                                    <textarea type="text"  name="trainingDetails" id="trainingDetails" cols="30" rows="5" th:field="*{trainingDetails}" required></textarea>
+                                    <textarea type="text"  name="trainingDetails" id="trainingDetails" cols="30" rows="5" th:field="*{trainingDetails}" maxlength="2000" required></textarea>
                                 </div>
                             
                             

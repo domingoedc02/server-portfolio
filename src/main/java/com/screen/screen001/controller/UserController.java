@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.screen.screen001.dto.TrainingBrowseHistory;
 import com.screen.screen001.dto.TrainingTopics;
@@ -36,9 +38,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/screen001")
 public class UserController {
 
-    
-    
-
     @Autowired
     private AdminService adminService;
 
@@ -50,7 +49,7 @@ public class UserController {
     @Autowired
     private TrainingBrowseHistoryRepository browseHistoryRepository;
 
-    
+
 
     @Autowired 
     private MemberProfileControllerRepository profileRepository;
@@ -101,7 +100,7 @@ public class UserController {
         model.addAttribute("browse", browse);
         model.addAttribute("role", isAdmin);
         model.addAttribute("listOfTopics", topics);
-        return "menu";
+        return "/menu";
     }
 
     @GetMapping("/trainingboard/{id}")
@@ -145,7 +144,7 @@ public class UserController {
         model.addAttribute("endTime", endTime);
         model.addAttribute("topic", topics);
 
-        return "trainingBoard";
+        return "/trainingBoard";
     }
 
     @GetMapping("/trainingboard/{id}/edit")
@@ -158,7 +157,7 @@ public class UserController {
         model.addAttribute("trainingObj", training);
         model.addAttribute("trainingTopic", topic);
         model.addAttribute("trainingId", id);
-        return "trainingBoardEdit";
+        return "/trainingBoardEdit";
     }
 
     @GetMapping("/memberlist")
@@ -166,13 +165,31 @@ public class UserController {
     String memberList(Model model, HttpServletRequest request) {
         List<User> users = adminService.getAllUsers();
         model.addAttribute("users", users);
-        return "memberList";
+        return "/memberList";
     }
 
     @GetMapping("/memberlist/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    String memberListId(Model model) {
-        return "memberListId";
+    String memberListId(Model model, @PathVariable("id") String id) {
+        Iterable<MemberProfile> training = memberProfileRepo.findByMemberId(id);
+        training.forEach(user -> {
+            if(user.getBirthDate() != null){
+                LocalDate birthDate = user.getBirthDate().toLocalDate();
+                LocalDate now = LocalDate.now();
+                model.addAttribute("age", Period.between(birthDate, now).getYears());
+            } else{
+                model.addAttribute("age", 0);
+            }
+            if(user.getAddress1() != null && user.getAddress2() != null){
+                model.addAttribute("address", user.getAddress1() + user.getAddress2());
+            } else {
+                model.addAttribute("address", "");
+            }
+            
+        });
+        // TrainingTopics training = trainingRepository.findByTrainingId(id).get();
+        model.addAttribute("profile",training);
+        return "/memberListId";
     }
 
     @GetMapping("/myprofile")
@@ -180,14 +197,23 @@ public class UserController {
     String myprofile(Model model, Authentication authenticate) {
         UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
         List<MemberProfile> profile = userService.getProfile(userDetails.getUsername());
-        model.addAttribute("address", profile.get(0).getAddress1() + profile.get(0).getAddress2());
+        if(profile.get(0).getBirthDate() != null){
+            LocalDate birthDate = profile.get(0).getBirthDate().toLocalDate();
+            LocalDate now = LocalDate.now();
+            model.addAttribute("age", Period.between(birthDate, now).getYears());
+        } else {
+            model.addAttribute("age", 0);
+        }
+        if(profile.get(0).getAddress1() != null && profile.get(0).getAddress2() != null){
+            model.addAttribute("address", profile.get(0).getAddress1() + profile.get(0).getAddress2());
+        } else {
+            model.addAttribute("address", "");
+        }
         model.addAttribute("profile", profile);
-        LocalDate birthDate = profile.get(0).getBirthDate().toLocalDate();
-        LocalDate now = LocalDate.now();
-        model.addAttribute("age", Period.between(birthDate, now).getYears());
+        
         model.addAttribute("bloodType", profile.get(0).getBloodType());
         System.out.println(profile.get(0));
-        return "myprofile";
+        return "/myprofile";
     }
 
     @GetMapping("/myprofile/edit")
@@ -198,7 +224,7 @@ public class UserController {
 
         model.addAttribute("profile", member);
         model.addAttribute("id", userDetails.getUsername());
-        return "editMyprofile";
+        return "/editMyprofile";
     }
 
     @PutMapping(path = "/myprofile/edit/{id}", consumes = "application/x-www-form-urlencoded")

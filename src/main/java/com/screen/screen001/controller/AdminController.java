@@ -60,7 +60,7 @@ public class AdminController {
         
         model.addAttribute("listOfTopics", topics);
         model.addAttribute("userList",users);
-        return "admin";
+        return "/admin";
     }
 
     @GetMapping("/trainingadd")
@@ -68,7 +68,7 @@ public class AdminController {
     String addTraining(Model model) {
         TrainingTopics topics = new TrainingTopics();
         model.addAttribute("topics", topics);
-        return "addTraining";
+        return "/addTraining";
     }
 
     @PostMapping(value = "/form/trainingadd")
@@ -151,7 +151,7 @@ public class AdminController {
         model.addAttribute("user", user);
 
         model.addAttribute("temporaryPassword", generatedString);
-        return "addMember";
+        return "/addMember";
     }
 
     @PostMapping(path = "/form/memberadd", consumes = "application/x-www-form-urlencoded")
@@ -177,7 +177,6 @@ public class AdminController {
         if(!(optionalUser.isPresent())){
             try{
                 adminService.saveUser(user, userDetails.getUsername());
-                
                 return "redirect:/screen001/adminmenu?user-added-successfull=true?userId="+id;
             } catch (Exception e){
                 System.out.println(e);

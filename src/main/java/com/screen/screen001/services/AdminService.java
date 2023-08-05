@@ -13,8 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.screen.screen001.dto.TrainingTopics;
+import com.screen.screen001.entity.MemberProfile;
 import com.screen.screen001.entity.Role;
 import com.screen.screen001.entity.User;
+import com.screen.screen001.repository.MemberProfileRepository;
 import com.screen.screen001.repository.TrainingTopicsRepository;
 import com.screen.screen001.repository.UserRepository;
 
@@ -33,6 +35,9 @@ public class AdminService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    private MemberProfileRepository memberProfileRepository;
 
 
     public void sendEmail(
@@ -91,12 +96,17 @@ public class AdminService {
             .updateMember(inputUser)
             .updateDate(timestamp)
             .build();
-        
+        MemberProfile profile = MemberProfile
+            .builder()
+            .memberId(user.getMemberId())
+            .memberName(user.getMemberName())
+            .build();
         if(user.getMemberId() != null && user.getPassword() != null){
             String bodyTemplate = "<h5> Member ID: "+user.getMemberId()+"</h5> <h5> Password: "+user.getPassword()+"</h5>";
             sendEmail(user.getEmail(), "WELCOME TO SCREEN", bodyTemplate);
         }
         userRepository.save(users);
+        memberProfileRepository.save(profile);
     }
 
     public List<TrainingTopics> getAllTrainingTopics(){

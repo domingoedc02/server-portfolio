@@ -74,7 +74,7 @@ public class LoginController {
         model.addAttribute("changePassObj", changePass);
 
         
-        return "changePassword";
+        return "/changePassword";
     }
 
     @PutMapping(path = "/form/changepassword", consumes = "application/x-www-form-urlencoded")
@@ -109,7 +109,7 @@ public class LoginController {
     @GetMapping("/forgotpassword")
     String forgotPassword(Model model, User user) {
         model.addAttribute("user", user);
-        return "forgotPassword";
+        return "/forgotPassword";
     }
 
     @PostMapping(path = "/forgotpassword")
@@ -143,7 +143,7 @@ public class LoginController {
         model.addAttribute("email", user[1].split(":")[1]);
         model.addAttribute("userObj", changePassword);
         
-        return "resetPassword";
+        return "/resetPassword";
     }
 
     @PutMapping(path = "/resetpassword" )
