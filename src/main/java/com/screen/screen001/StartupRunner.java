@@ -3,10 +3,9 @@ package com.screen.screen001;
 import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import com.screen.screen001.entity.MemberProfile;
 import com.screen.screen001.entity.Role;
@@ -14,12 +13,10 @@ import com.screen.screen001.entity.User;
 import com.screen.screen001.repository.MemberProfileRepository;
 import com.screen.screen001.repository.UserRepository;
 
-
-
-@SpringBootApplication
-public class Screen001Application {
-
-	@Autowired
+@Component
+public class StartupRunner implements CommandLineRunner{
+    
+    @Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
@@ -27,10 +24,10 @@ public class Screen001Application {
 
 	@Autowired
 	private MemberProfileRepository memberProfileRepository;
-	
-	
-	public void addUserAdmin(){
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+    @Override
+    public void run(String...args) throws Exception {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		//Register Admin User
 		User user = User
 		.builder()
@@ -54,15 +51,5 @@ public class Screen001Application {
 
 		memberProfileRepository.save(profile);
 		userRepository.save(user);
-	}
-	
-	public static void main(String[] args) {
-		
-		SpringApplication.run(Screen001Application.class, args);
-	}
-
-
-
-	
-
+    }
 }
