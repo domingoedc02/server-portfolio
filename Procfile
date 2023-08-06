@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/Screen001.jar
+web: java -Dserver.port=8081 -jar target/Screen001.jar
