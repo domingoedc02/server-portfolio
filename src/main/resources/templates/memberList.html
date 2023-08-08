@@ -37,7 +37,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
         <div class="row">
             <div class="border">
                 <div class="col column">
-                    <a href="#" class="logout">戻る</a>
+                    <a th:href="@{/screen001/menu}" class="logout">戻る</a>
                     <h2 class="text-center">メンバー一覧</h2>
 
                     <table class="table mt-5 mx-auto">
@@ -53,10 +53,10 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                             </tr>
                             <tr th:each="user : ${users}" >
                                 
-                                    <td th:text="${user.memberId}">SR0001</td>
-                                    <td><a th:href="@{'/screen001/memberlist/'+${user.memberId}}" th:text="${user.memberName}"></a></td>
+                                    <td th:text="${user.memberId}" style="border: 1px solid black;">SR0001</td>
+                                    <td style="border: solid 1px black;"><a th:href="@{'/screen001/memberlist/'+${user.memberId}}" th:text="${user.memberName}"></a></td>
                                 
-                                
+                                    
                             </tr>
                            <!-- <tr>
                                 <td>SR0002</td>

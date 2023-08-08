@@ -23,6 +23,9 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
             margin: 20px auto;
             padding: 15px;
         }
+        .p{
+            max-width: 500px;
+        }
     </style>
 
 </head>
@@ -41,13 +44,51 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                     </div>
 
                     
-                    <div th:each="topic : ${topic}">
-                        <div id="isSuccessAlert" class="alert alert-success" style="display: none;">
-                            <strong th:text="${topic.trainingId}">Success!</strong> の変更しました。
-                        </div>
-                        <h4 class="mt-4" th:text="${topic.trainingName}">〇〇〇〇〇</h4>
+                    <div class=" mt-5" style="border: 1px solid black; width: 450px">
+                        <table class="table" th:each="topic : ${topic}">
+                            
+                            <tbody >
+                              <tr>
+                                <th scope="row" th:text="${topic.trainingName}"></th>
+                                <th></th>
+                              </tr>
+                              <tr>
+                                <th scope="row" th:text="${topic.trainingDate}"></th>
+                                <th scope="row" th:text="${startTime} + ' - ' + ${endTime}"></th>
+                              </tr>
+                              <tr>
+                                <th scope="row" th:text="${updateDate}"></th>
+                                <th></th>
+                              </tr>
+                              <tr>
+                                <th scope="row" th:text="${updateUser}"></th>
+                                <th></th>
+                              </tr>
+                              <tr >
+                                <td scope="row"  >
+                                    <div class="p" >
+                                        <span th:text="${topic.trainingDetails}"></span>
+                                    </div>
+                                </td>
+                                
+                              </tr>
+                              <tr>
+                                
+                                
+                              </tr>
+                            </tbody>
+                            
+                          </table>
+                          <a th:href="@{'/screen001/downloadfile?id=' + ${trainingId}}" class="d-block text-center my-3" th:text="${fileName}"> ファイルxxx.zip</a>
+
+                          <div th:switch="${isAdmin}">
+                            <a th:case="'ADMIN'" th:href="@{'/screen001/trainingboard/' + ${trainingId} + '/edit'}" class="d-block float-right btn btn-primary mt-3" type="button">編集</a>
+                          </div>
+                          
+                        
+                        <!-- <h4 class="mt-4" th:text="${topic.trainingName}">〇〇〇〇〇</h4>
                         <h4 class="my-3"><span th:text="${topic.trainingDate}"></span>　<span th:text="${startTime}"></span> - <span th:text="${endTime}"></span></h4>
-                        <!-- <h4 class="my-3">23/03/11</h4> -->
+                        <h4 class="my-3">23/03/11</h4>
                         <h4 class="my-3">●●●●</h4>
                         <p class="w-75 my-3" th:text="${topic.trainingDetails}">
                             xxxxxxxxxxxxxxxxxxxxxxx
@@ -56,7 +97,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                         </p>
                         <div style="text-align: center;">
                             <a href="#" class="my-3">ファイルxxx.zip</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

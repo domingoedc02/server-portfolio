@@ -74,7 +74,7 @@ public class LoginController {
         model.addAttribute("changePassObj", changePass);
 
         
-        return "changePassword";
+        return "/changePassword";
     }
 
     @PutMapping(path = "/form/changepassword", consumes = "application/x-www-form-urlencoded")
@@ -92,7 +92,7 @@ public class LoginController {
                     userRepository.save(updatePassword);
                     userControlsRepo.save(updatePassword);
                     SecurityContextHolder.clearContext();
-                    return "redirect:/api/v1/auth/logout";
+                    return "redirect:/logout";
                 } else{
                     return "redirect:/screen001/changepassword?changedPassword=false";
                 }
@@ -109,7 +109,7 @@ public class LoginController {
     @GetMapping("/forgotpassword")
     String forgotPassword(Model model, User user) {
         model.addAttribute("user", user);
-        return "forgotPassword";
+        return "/forgotPassword";
     }
 
     @PostMapping(path = "/forgotpassword")
@@ -120,7 +120,7 @@ public class LoginController {
         if(users.isPresent()){
             if(users.get().getEmail().equals(user.getEmail())){
                 userService.forgotPassword(user.getMemberId(), user.getEmail(), url);
-                return "redirect:/screen001/forgotpassword?confirm";
+                return "redirect:/screen001/forgotpassword?reset-password=true";
             }
         }
 
@@ -143,7 +143,7 @@ public class LoginController {
         model.addAttribute("email", user[1].split(":")[1]);
         model.addAttribute("userObj", changePassword);
         
-        return "resetPassword";
+        return "/resetPassword";
     }
 
     @PutMapping(path = "/resetpassword" )

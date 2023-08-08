@@ -44,7 +44,8 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                     <a th:href="@{/logout}" class="logout">ログアウト</a>
                     <h2 class="text-center">TOPメニュー</h2>
                     
-                    <h5 class="mt-5">研修一覧</h5>
+                    <h5 class="mt-5 d-inline">研修一覧</h5>
+                    <h5 class="d-block float-right"><span th:text="${trainingDate}" style="background-color: gray; color: black; padding: 2px 5px; border: solid 1px black;"></span></h5>
                     <table class="table">
                         <tbody>
                             <tr th:if="${listOfTopics.empty}">
@@ -60,7 +61,10 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                                         <th th:case="*"></th>
                                     </div>  
                                 </div> -->
-                                <th class="new-badge"><span class="badge badge-warning" >NEW</span></th>
+                                <th class="new-badge" th:switch="${topics.trainingDetails}">
+                                    <span th:case="'browsed=true'"></span>
+                                    <span class="badge badge-warning" th:case="*">NEW</span>
+                                </th>
                                 <td scope="row"> <a th:href="@{'/screen001/trainingboard/' + ${topics.trainingId}}"><span th:text="${topics.trainingDate}"></span> <span th:text="${topics.trainingName}"></span></a></td>
                             </tr>
                             

@@ -40,7 +40,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                         <form th:action="@{/screen001/form/memberadd}" method="post" th:object="${user}">
                             <div class="form-group mt-5">
                                 <label for="name">ID</label>
-                                <input type="text" class="form-control" id="id" th:field="*{memberId}" placeholder="XXXX" readonly>
+                                <input type="text" class="form-control" id="id" th:field="*{memberId}" placeholder="XXXX" maxlength="5">
                             </div>
                             <div class="form-group">
                                 <label for="date" id="nameLabel">氏名</label>
@@ -50,9 +50,10 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                                 <label for="email" id="emailLabel">Mail</label>
                                 <input type="email" class="form-control" id="email" placeholder="XXXX@XXXX" th:field="*{email}" required>
                             </div>
-                            <div class="form-group">
-                                <label for="password" id="passwordLabel">初期PW:</label>
-                                <input type="text" class="form-control" id="password" placeholder="" th:field="*{password}" required readonly>
+                            <div class="form-group mt-3">
+                                <label for="password" id="passwordLabel">初期PW: <span th:text="${temporaryPassword}" style="font-size: larger; font-weight: bold;"></span></label>
+
+                                <input type="text" class="form-control" id="password" placeholder="" method="password" th:field="*{password}" hidden>
                             </div>
                             <input type="hidden" name="_method" value="post" />
                             <!-- <button type="submit" class="btn btn-primary w-100 my-3">登録</button> -->
