@@ -1,1 +1,1 @@
-web: java -jar target/Screen001.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/Screen001.jar
