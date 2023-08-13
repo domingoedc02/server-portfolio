@@ -76,7 +76,41 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                                       <tr>
                                         <th scope="row" style="border: 0px white solid; ">研修内容</th>
                                         <td colspan="2" style="border: 2px solid black; padding: 0px;">
-                                            <textarea style="border-radius: 0%; resize: none; margin: 0px; border: 2px solid black;" type="text"  name="trainingDetails" id="trainingDetails" cols="39" rows="7" th:field="*{trainingDetails}" maxlength="2000" ></textarea>
+                                            <!-- <textarea style="border-radius: 0%; resize: none; margin: 0px; border: 2px solid black;" type="text"  name="trainingDetails" id="trainingDetails" cols="39" rows="7" th:field="*{trainingDetails}" maxlength="2000" ></textarea> -->
+                                            <input type="text" hidden th:value="${trainingDetails}" name="test" id="temp">
+                                            <div id="trainingDetails" oninput="updateText()" contenteditable="true" style="border-radius: 0%;  margin: 0px; border: 2px solid black; height: 150px; overflow-y: scroll;" >
+
+                                            </div>
+                                            <input type="text" id="details" name="trainingDetails" value="test" hidden>
+                                            <script>
+                                                document.getElementById("trainingDetails").innerHTML = document.getElementById("temp").value
+                                                function updateText(){
+                                                    let text = document.getElementById("trainingDetails").innerHTML;
+                                                    
+                                                    document.getElementById("details").value = document.getElementById("trainingDetails").innerHTML
+                                                    if(text.length < 2000){
+                                                        
+                                                        console.log(text.length)
+                                                    } else {
+                                                        
+                                                        // Keyup event
+                                                        document.querySelector('#trainingDetails').addEventListener('keydown', e => {
+                                                            
+                                                            return false
+                                                                
+                                                            
+                                                        });
+                                                    }
+
+                                                    
+                                                    
+                                                    // console.log(document.getElementById("temp").value)
+                                                    
+                                                }
+                                                
+                                            </script>
+
+                                            
                                         </td>
                                       </tr>
                                       <tr class="fileRow">

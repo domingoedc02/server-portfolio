@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,7 @@ import com.screen.screen001.repository.UserRepository;
 import com.screen.screen001.services.AdminService;
 import com.screen.screen001.services.UserService;
 
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -70,7 +73,8 @@ public class UserController {
     @GetMapping("/menu")
     String menu(Model model, Authentication authenticate) {
         
-        List<TrainingBrowseHistory> browse = new ArrayList<>();
+        List<TrainingTopics> browse = new ArrayList<>();
+        List<TrainingTopics> tempBrowse = new ArrayList<>();
         UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
         List<TrainingTopics> topics = adminService.getAllTrainingTopics(userDetails.getUsername());
         List<TrainingBrowseHistory> history =  browseHistoryRepository.findByMemberId(userDetails.getUsername());
@@ -83,21 +87,139 @@ public class UserController {
             isAdmin = false;
         }
         
-        for(int i = 0; i < topics.size(); i++){
-            for(int j = 0; j < history.size(); j++){
-                if(topics.get(i).getTrainingId().equals(history.get(j).getTrainingId())){
-                    topics.get(i).setTrainingDetails("browsed=true");
+        if(!history.isEmpty()){
+            for(int i = 0; i < topics.size(); i++){
+                for(int j = 0; j < history.size(); j++){
+                    if(topics.get(i).getTrainingId().equals(history.get(j).getTrainingId())){
+                        topics.get(i).setTrainingDetails("browsed=true");
+                    } else {
+                        topics.get(i).setTrainingDetails("");
+                    }
                 }
             }
         }
 
+
         if(topics.isEmpty()){
             LocalDate trainingDate = LocalDate.now();
-            model.addAttribute("trainingDate", trainingDate);
+            model.addAttribute("trainingDate", trainingDate.toString().replaceAll("-", "/"));
         } else {
-            Date trainingDate = topics.get(0).getTrainingDate();
-            model.addAttribute("trainingDate", trainingDate);
+            // Date trainingDate = topics.get(0).getTrainingDate();
+            LocalDate trainingDate = LocalDate.now();
+            model.addAttribute("trainingDate", trainingDate.toString().replaceAll("-", "/"));
         }
+
+            if(!topics.isEmpty()){
+                topics.forEach(data -> {
+                    // System.out.println(data.getTrainingDetails().equals("browsed=true"));
+                    if(data.getTrainingDetails().equals("browsed=true")){
+                        // System.out.println("browsed = " + data.getTrainingId());
+                        browse.add(TrainingTopics
+                                    .builder()
+                                    .trainingId(data.getTrainingId())
+                                    .trainingName(data.getTrainingName())
+                                    .trainingDate(data.getTrainingDate())
+                                    .deleteFlag(data.getDeleteFlag())
+                                    .trainingStartTime(data.getTrainingStartTime())
+                                    .trainingEndTime(data.getTrainingEndTime())
+                                    .trainingDetails(data.getTrainingDetails())
+                                    .insertMember(data.getInsertMember())
+                                    .insertDate(data.getInsertDate())
+                                    .updateMember(data.getUpdateMember())
+                                    .updateDate(data.getUpdateDate())
+                                    .build()
+                                );
+                    }
+                     else {
+                        // System.out.println("new = " + data.getTrainingId());
+                        tempBrowse.add(TrainingTopics
+                                    .builder()
+                                    .trainingId(data.getTrainingId())
+                                    .trainingName(data.getTrainingName())
+                                    .trainingDate(data.getTrainingDate())
+                                    .deleteFlag(data.getDeleteFlag())
+                                    .trainingStartTime(data.getTrainingStartTime())
+                                    .trainingEndTime(data.getTrainingEndTime())
+                                    .trainingDetails(data.getTrainingDetails())
+                                    .insertMember(data.getInsertMember())
+                                    .insertDate(data.getInsertDate())
+                                    .updateMember(data.getUpdateMember())
+                                    .updateDate(data.getUpdateDate())
+                                    .build()
+                                );
+                    }
+                });
+                topics.clear();
+            } 
+
+            
+            Collections.sort(tempBrowse, new Comparator<TrainingTopics>() {
+                    public int compare(TrainingTopics t1, TrainingTopics t2){
+                        return Long.valueOf(t1.getTrainingDate().getTime()).compareTo(t2.getTrainingDate().getTime());
+                    }
+                });
+            Collections.reverse(tempBrowse);
+            
+            if(browse.isEmpty()){
+                tempBrowse.forEach(data -> {
+                    topics.add(TrainingTopics
+                                .builder()
+                                .trainingId(data.getTrainingId())
+                                .trainingName(data.getTrainingName())
+                                .trainingDate(data.getTrainingDate())
+                                .deleteFlag(data.getDeleteFlag())
+                                .trainingStartTime(data.getTrainingStartTime())
+                                .trainingEndTime(data.getTrainingEndTime())
+                                .trainingDetails(data.getTrainingDetails())
+                                .insertMember(data.getInsertMember())
+                                .insertDate(data.getInsertDate())
+                                .updateMember(data.getUpdateMember())
+                                .updateDate(data.getUpdateDate())
+                                .build()
+                            );
+                });
+            } else {
+                Collections.sort(browse, new Comparator<TrainingTopics>() {
+                        public int compare(TrainingTopics t1, TrainingTopics t2){
+                            return Long.valueOf(t1.getTrainingDate().getTime()).compareTo(t2.getTrainingDate().getTime());
+                        }
+                    });
+                Collections.reverse(browse);
+                tempBrowse.forEach(data -> {
+                    topics.add(TrainingTopics
+                                .builder()
+                                .trainingId(data.getTrainingId())
+                                .trainingName(data.getTrainingName())
+                                .trainingDate(data.getTrainingDate())
+                                .deleteFlag(data.getDeleteFlag())
+                                .trainingStartTime(data.getTrainingStartTime())
+                                .trainingEndTime(data.getTrainingEndTime())
+                                .trainingDetails(data.getTrainingDetails())
+                                .insertMember(data.getInsertMember())
+                                .insertDate(data.getInsertDate())
+                                .updateMember(data.getUpdateMember())
+                                .updateDate(data.getUpdateDate())
+                                .build()
+                            );
+                });
+                browse.forEach(data -> {
+                    topics.add(TrainingTopics
+                                .builder()
+                                .trainingId(data.getTrainingId())
+                                .trainingName(data.getTrainingName())
+                                .trainingDate(data.getTrainingDate())
+                                .deleteFlag(data.getDeleteFlag())
+                                .trainingStartTime(data.getTrainingStartTime())
+                                .trainingEndTime(data.getTrainingEndTime())
+                                .trainingDetails(data.getTrainingDetails())
+                                .insertMember(data.getInsertMember())
+                                .insertDate(data.getInsertDate())
+                                .updateMember(data.getUpdateMember())
+                                .updateDate(data.getUpdateDate())
+                                .build()
+                            );
+                });
+            }
 
         
 
@@ -150,6 +272,8 @@ public class UserController {
             browseHistoryRepository.save(updateBrowse);
         }
 
+        
+
 
         
         String[] temp = String.valueOf(userDetails.getAuthorities().toArray()[0]).split("_");
@@ -158,6 +282,8 @@ public class UserController {
         String startTime = String.valueOf(topics.get(0).getTrainingStartTime());
         String endTime = String.valueOf(topics.get(0).getTrainingEndTime());
         String[] updateDateTemp = String.valueOf(training.get().getUpdateDate()).split(" ");
+
+       
         model.addAttribute("updateDate", updateDateTemp[0]);
         model.addAttribute("updateUser", user.get().getMemberName());
         model.addAttribute("startTime", startTime);
@@ -187,6 +313,7 @@ public class UserController {
         model.addAttribute("trainingObj", training);
         model.addAttribute("trainingTopic", topic);
         model.addAttribute("trainingId", id);
+        model.addAttribute("trainingDetails", topic.get(0).getTrainingDetails());
         return "/trainingBoardEdit";
     }
 

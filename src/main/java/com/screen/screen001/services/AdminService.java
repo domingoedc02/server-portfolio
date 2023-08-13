@@ -130,25 +130,28 @@ public class AdminService {
         
 
         findTopic.forEach(data -> {
-                if(data.getDeleteFlag().equals("0")){
-                    
-                    topics.add(TrainingTopics
-                        .builder()
-                        .trainingId(data.getTrainingId())
-                        .trainingName(data.getTrainingName())
-                        .trainingDate(data.getTrainingDate())
-                        .deleteFlag(data.getDeleteFlag())
-                        .trainingStartTime(data.getTrainingStartTime())
-                        .trainingEndTime(data.getTrainingEndTime())
-                        .trainingDetails(data.getTrainingDetails())
-                        .insertMember(data.getInsertMember())
-                        .insertDate(data.getInsertDate())
-                        .updateMember(data.getUpdateMember())
-                        .updateDate(data.getUpdateDate())
-                        .build()
-                    );
-                }
-            });
+            if(data.getDeleteFlag().equals("0")){
+                
+                topics.add(TrainingTopics
+                    .builder()
+                    .trainingId(data.getTrainingId())
+                    .trainingName(data.getTrainingName())
+                    .trainingDate(data.getTrainingDate())
+                    .deleteFlag(data.getDeleteFlag())
+                    .trainingStartTime(data.getTrainingStartTime())
+                    .trainingEndTime(data.getTrainingEndTime())
+                    .trainingDetails(data.getTrainingDetails())
+                    .insertMember(data.getInsertMember())
+                    .insertDate(data.getInsertDate())
+                    .updateMember(data.getUpdateMember())
+                    .updateDate(data.getUpdateDate())
+                    .build()
+                );
+            }
+            
+        });
+
+        
         
 
         // if(browsed.isEmpty()){

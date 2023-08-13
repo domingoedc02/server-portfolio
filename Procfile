@@ -1,0 +1,1 @@
+web: java -jar target/Screen001.jar

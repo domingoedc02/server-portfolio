@@ -91,7 +91,20 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                                   <tr>
                                     <th scope="row" style="border: 0px white solid; ">研修内容</th>
                                     <td colspan="2" style="border: 2px solid black; padding: 0px;">
-                                        <textarea style="border-radius: 0%; resize: none; margin: 0px; border: 2px solid black;" type="text"  name="trainingDetails" id="trainingDetails" cols="43" rows="7" th:field="*{trainingDetails}" maxlength="2000" ></textarea>
+                                        <!-- <textarea  onkeyup="detailsChange(this)" style="border-radius: 0%; resize: none; margin: 0px; border: 2px solid black;" type="text"  name="trainingDetails" id="trainingDetails" cols="43" rows="7" th:field="*{trainingDetails}" maxlength="2000" ></textarea> -->
+                                        <div id="trainingDetails" oninput="updateText(this)" contenteditable="true" style="border-radius: 0%;  margin: 0px; border: 2px solid black; height: 100px; overflow-y: scroll;" >
+
+                                        </div>
+                                        <input type="text" id="details" name="trainingDetails" value="test" hidden>
+                                        <script>
+                                            
+                                            function updateText(txt){
+                                                console.log(txt)
+                                                document.getElementById("details").value = document.getElementById("trainingDetails").innerHTML
+
+                                            }
+                                            
+                                        </script>
                                     </td>
                                   </tr>
                                   <tr class="fileRow">

@@ -65,10 +65,18 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                                 <th></th>
                               </tr>
                               <tr >
-                                <td scope="row"  colspan="2">
-                                    <div class="p" >
-                                        <span th:text="${topic.trainingDetails}"></span>
+                                <td scope="row"  colspan="2" style="padding-bottom: 0px;">
+                                    <span id="trainingDetails" th:text="${topic.trainingDetails}" hidden></span>
+                                    <div class="p" id="details" style="height: 100px; overflow-y: scroll; padding: 2px;">
+                                        
+                                        
                                     </div>
+                                    
+                                    <script>
+                                        var xmlString = document.getElementById("trainingDetails").innerText
+                                        document.getElementById("details").innerHTML = xmlString
+                                        
+                                     </script>
                                 </td>
                                 
                               </tr>
