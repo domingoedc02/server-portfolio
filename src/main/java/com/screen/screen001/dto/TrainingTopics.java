@@ -17,12 +17,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_training_topics")
+@Table(name = "tbl_training_topics", schema = "screen")
 @Entity
 public class TrainingTopics {
     
     @Id
-    @Column(nullable = false, length = 5)
+    @Column(nullable = false, length = 5 )
     private String trainingId;
 
     @Column(nullable = false, length = 80)

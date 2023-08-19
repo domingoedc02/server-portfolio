@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_training_files")
+@Table(name = "tbl_training_files", schema = "screen")
 @Entity
 public class TrainingFiles {
     

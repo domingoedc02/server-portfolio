@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tbl_member_profiles")
+@Table(name = "tbl_member_profiles", schema = "screen")
 public class MemberProfile {
     
     @Id

@@ -327,8 +327,14 @@ public class UserController {
 
     @GetMapping("/memberlist/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    String memberListId(Model model, @PathVariable("id") String id) {
+    String memberListId(Model model, @PathVariable("id") String id, Authentication authenticate) {
         Iterable<MemberProfile> training = memberProfileRepo.findByMemberId(id);
+        UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
+
+        if(id.equals(userDetails.getUsername())){
+            return "redirect:/screen001/myprofile";
+        }
+
         training.forEach(user -> {
             if(user.getBirthDate() != null){
                 LocalDate birthDate = user.getBirthDate().toLocalDate();

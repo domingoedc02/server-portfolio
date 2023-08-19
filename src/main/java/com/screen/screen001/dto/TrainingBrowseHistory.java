@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_training_browse_history")
+@Table(name = "tbl_training_browse_history", schema = "screen")
 @Entity
 public class TrainingBrowseHistory {
     
